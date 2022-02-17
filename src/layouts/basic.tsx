@@ -1,11 +1,14 @@
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'umi';
 import { Layout, Button } from 'antd';
-import { useEthers, useEtherBalance } from '@usedapp/core';
-import { formatEther } from '@ethersproject/units';
-import { Hardhat, Mainnet, Ropsten, BSCTestnet, DAppProvider, Config } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
+import { utils } from 'ethers';
+import { ChainId, Hardhat, Mainnet, Ropsten, BSCTestnet, DAppProvider, Config } from '@usedapp/core';
 import { shortAddress } from '@/utils';
 import styles from './basic.less';
-import React from 'react';
+import { erc20ContractAddress } from '@/variables';
+import erc20ABI from '@/abis/erc20.json';
+import { useContract } from '@/hooks/useContract';
 
 const { Header, Footer, Content } = Layout;
 
@@ -20,45 +23,64 @@ const config: Config = {
   // },
   networks: [Hardhat, Mainnet, Ropsten, BSCTestnet],
   autoConnect: true,
+  multicallAddresses: {
+    [ChainId.Mainnet]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
+    [ChainId.BSCTestnet]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
+    [ChainId.Hardhat]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
+    [ChainId.Localhost]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
+  },
 };
 
 const BasicLayout: React.FC = ({ children }) => {
   const { activateBrowserWallet, account, chainId } = useEthers();
-  const etherBalance = useEtherBalance(account);
+  const [tokenBalance, setTokenBalance] = useState<number>();
+
+  const erc20Contract = useContract(erc20ContractAddress, erc20ABI);
+
+  useEffect(() => {
+    if (!account || !erc20Contract) return;
+
+    (async () => {
+      const balance = await erc20Contract.balanceOf(account);
+      setTokenBalance(balance.toNumber());
+    })();
+  }, [account, erc20Contract]);
 
   return (
-    <Layout>
+    <Layout className={styles.layout}>
       <Header className={styles.header}>
         <NavLink to="/">
-          <span className={styles.logo}>LOGO</span>
+          <span className={styles.logo}>Launchpad</span>
         </NavLink>
 
         <span className={styles.menus}>
-          <NavLink to="/projects">项目</NavLink>
+          <NavLink to="/projects">Projects</NavLink>
         </span>
 
         {account ? (
           <span className={styles.wrapAccount}>
             <span>chainId: {chainId}</span>
             <span>Account: {shortAddress(account)}</span>
-            <span>Balance: {formatEther(etherBalance || '0')}</span>
+            <span>Token Balance: {utils.formatUnits(String(tokenBalance || '0'), 8)}</span>
           </span>
         ) : (
-          <Button
-            type="link"
-            className={styles.connectBtn}
-            onClick={() => {
-              console.log('activateBrowserWallet');
-              activateBrowserWallet();
-            }}
-          >
-            关联钱包
-          </Button>
+          <span className={styles.wrapAccount}>
+            <Button
+              type="link"
+              className={styles.connectBtn}
+              onClick={() => {
+                console.log('activateBrowserWallet');
+                activateBrowserWallet();
+              }}
+            >
+              Connect Wallet
+            </Button>
+          </span>
         )}
       </Header>
 
       <Content className={styles.content}>{children}</Content>
-      <Footer>Footer</Footer>
+      <div className={styles.footer}>v1.0.01</div>
     </Layout>
   );
 };

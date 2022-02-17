@@ -4,6 +4,11 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
+
+  theme: {
+    '@primary-color': '#f1b90c',
+  },
+
   routes: [
     {
       path: '/',

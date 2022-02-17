@@ -1,15 +1,25 @@
+.layout {
+  background: url(https://idolaunchpad.org/images/launchpad2.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 .header {
   display: flex;
   flex-direction: row;
   align-items: center;
   color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 50%);
+  font-weight: 400;
+  font-size: 16px;
 
   .menus {
-    margin-left: auto;
+    margin-left: 220px;
   }
 
   .wrapAccount {
-    margin-left: 12px;
+    margin-left: auto;
     display: flex;
     flex-direction: row;
     gap: 24px;
@@ -17,7 +27,13 @@
 }
 
 .content {
-  padding: 48px;
+  // padding: 48px;
   min-height: calc(100vh - 64px - 70px);
   box-sizing: border-box;
+}
+
+.footer {
+  height: 70px;
+  text-align: center;
+  color: #666;
 }

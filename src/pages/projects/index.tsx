@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'umi';
 import { Card } from 'antd';
+import Banner from '@/components/Banner';
 import styles from './index.less';
 
 export const data = {
@@ -16,9 +17,11 @@ export const data = {
 
 export default function IndexPage() {
   return (
-    <div>
-      <NavLink to="/project/0xxxx">
-        <Card title={data.name} style={{ width: 520 }}>
+    <div className={styles.normal}>
+      <Banner></Banner>
+
+      {/* <NavLink to="/project/0xxxx">
+        <Card title={data.name} style={{ width: 520, marginTop: 48 }}>
           <p>描述: {data.description}</p>
           <p>算力总量: {data.hashrate_volume}</p>
           <p>支付类型: {data.payment_type}</p>
@@ -27,7 +30,7 @@ export default function IndexPage() {
           <p>交割类型: {data.jg_type}</p>
           <p>交割周琦: {data.jg_period}</p>
         </Card>
-      </NavLink>
+      </NavLink> */}
     </div>
   );
 }
