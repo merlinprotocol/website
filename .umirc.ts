@@ -5,7 +5,15 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index' },
+    {
+      path: '/',
+      component: '@/layouts/basic',
+      routes: [
+        { path: '/', redirect: '/projects' },
+        { path: '/projects', component: '@/pages/projects' },
+        { path: '/project/:address', component: '@/pages/project' },
+      ],
+    },
   ],
   fastRefresh: {},
 });
