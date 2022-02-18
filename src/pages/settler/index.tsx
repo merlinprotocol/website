@@ -77,7 +77,7 @@ export default () => {
 
   return (
     <div style={{ width: 1200, margin: '0 auto' }}>
-      <Card style={{ marginTop: 48 }}>
+      <Card style={{ marginTop: 48 }} bordered={false}>
         <div className={styles.content}>
           <Steps size="small" current={current}>
             <Step title="Deploy Contract" />

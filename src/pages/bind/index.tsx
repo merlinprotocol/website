@@ -6,23 +6,27 @@ import { useEthers } from '@usedapp/core';
 import NFTABI from '@/abis/NFT.json';
 import hashrateABI from '@/abis/project.json';
 import erc20ABI from '@/abis/erc20.json';
+import whitelistABI from '@/abis/whitelist.json';
 import { useContract } from '@/hooks/useContract';
 import { data } from '../projects/index';
-import { NFT_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS, PAYMENT_TOKEN_CONTRACT_ADDRESS } from '@/variables';
+import { NFT_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS, PAYMENT_TOKEN_CONTRACT_ADDRESS, WHITELIST_CONTRACT_ADDRESS } from '@/variables';
 
 export default () => {
   const { address } = useParams<{ address: string }>();
   const nftContract = useContract(NFT_CONTRACT_ADDRESS, NFTABI);
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
   const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
+  const whitelistContract = useContract(WHITELIST_CONTRACT_ADDRESS, whitelistABI);
 
   const { account } = useEthers();
 
   const [mintLoading, setMintLoading] = useState(false);
   const [bindLoading, setBindLoading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
 
   const [form] = Form.useForm<{ tokenId: number; contract: string; price: number; amount: number }>();
   const [showTokenId, setShowTokenId] = useState<number>();
+  const [inputContract, setInputContract] = useState(NFT_CONTRACT_ADDRESS);
 
   useEffect(() => {
     setup();
@@ -42,9 +46,15 @@ export default () => {
   };
 
   const onFinish = async (values: any) => {
-    if (!hashrateContract || !paymentTokenContract) return;
+    if (!hashrateContract || !paymentTokenContract || !whitelistContract) return;
 
     try {
+      // check whitelist
+      const isWhitelist = await whitelistContract.verify(values.contract);
+      if (!isWhitelist) {
+        return message.error('Contract is not in whitelist');
+      }
+
       setBindLoading(true);
       console.log('values.amount', values.amount);
       console.log('utils.parseEther(values.amount):', utils.parseEther(String(values.amount)));
@@ -102,11 +112,25 @@ export default () => {
     });
   };
 
-  console.log('token id: ', form.getFieldValue('tokenId'));
+  const addWhiteList = async () => {
+    if (!inputContract || !whitelistContract) return;
+
+    try {
+      setAddLoading(true);
+      const tx = await whitelistContract.add(inputContract);
+      await tx.wait();
+      message.success('Success!');
+    } catch (error: any) {
+      console.error(error);
+      message.error(error.message);
+    } finally {
+      setAddLoading(false);
+    }
+  };
 
   return (
     <div style={{ width: 1200, margin: '48px auto' }}>
-      <Card title="Step 1: Mint NFT(DEV)">
+      <Card title="Step 1: Mint NFT(DEV)" bordered={false}>
         <p>NFT Contract: {NFT_CONTRACT_ADDRESS}</p>
         <p>Token ID: {showTokenId}</p>
         <Button type="primary" size="large" onClick={handleMint} loading={mintLoading} block disabled={!account}>
@@ -114,7 +138,19 @@ export default () => {
         </Button>
       </Card>
 
-      <Card title={`Project: ${address}`} style={{ marginTop: 24 }}>
+      <Card title="Add to whitelist" style={{ marginTop: 48 }} bordered={false}>
+        <p>
+          Contract:
+          <Input value={inputContract} onChange={(e) => setInputContract(e.target.value)} />
+        </p>
+
+        <Button type="primary" size="large" onClick={addWhiteList} loading={addLoading} block>
+          Add
+        </Button>
+        <p>Whitelist contract owner is: account #0</p>
+      </Card>
+
+      <Card title={`Project: ${address}`} style={{ marginTop: 24 }} bordered={false}>
         <Form
           form={form}
           labelCol={{ span: 6 }}

@@ -7,6 +7,25 @@ export default defineConfig({
 
   theme: {
     '@primary-color': '#f1b90c',
+    '@disabled-bg': '#907019',
+    '@disabled-color': '#efefef',
+    '@border-color-base': '#222222',
+    '@height-base': '40px',
+
+    '@card-head-color': '#999999',
+    '@card-head-background': '#222122',
+    '@card-background': '#222122',
+    '@card-radius': '24px',
+
+    '@label-color': '#999999',
+
+    '@input-bg': '#161616',
+    '@input-color': '#f1b90c',
+    '@input-border-color': '#222122',
+    '@input-height-base': '40px',
+    '@input-addon-bg': '#161616',
+
+    '@input-number-handler-bg': '#222222',
   },
 
   routes: [
