@@ -16,7 +16,9 @@ export default defineConfig({
       routes: [
         { path: '/', redirect: '/projects' },
         { path: '/projects', component: '@/pages/projects' },
-        { path: '/project/:address', component: '@/pages/project' },
+        { path: '/bind/:address', component: '@/pages/bind' },
+        { path: '/settler', component: '@/pages/settler' },
+        { path: '/history/:project', component: '@/pages/history' },
       ],
     },
   ],

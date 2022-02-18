@@ -8,13 +8,13 @@ import hashrateABI from '@/abis/project.json';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
 import { data } from '../projects/index';
-import { nftContractAddress, hashrateContractAddress, erc20ContractAddress } from '@/variables';
+import { NFT_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS, PAYMENT_TOKEN_CONTRACT_ADDRESS } from '@/variables';
 
 export default () => {
   const { address } = useParams<{ address: string }>();
-  const nftContract = useContract(nftContractAddress, NFTABI);
-  const hashrateContract = useContract(hashrateContractAddress, hashrateABI);
-  const erc20Contract = useContract(erc20ContractAddress, erc20ABI);
+  const nftContract = useContract(NFT_CONTRACT_ADDRESS, NFTABI);
+  const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
+  const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
 
   const { account } = useEthers();
 
@@ -26,26 +26,29 @@ export default () => {
 
   useEffect(() => {
     setup();
-  }, [account, erc20Contract, hashrateContract]);
+  }, [account, paymentTokenContract, hashrateContract]);
 
   const setup = async () => {
-    if (!hashrateContract || !erc20Contract) return;
+    if (!hashrateContract || !paymentTokenContract) return;
 
     loadAccountNFT(account);
 
     const hashratePrice = await hashrateContract.getPrice();
-    const erc20Decimals = await erc20Contract.decimals();
+    console.log('hashratePrice', utils.formatEther(hashratePrice));
 
-    form.setFieldsValue({ contract: nftContractAddress, price: parseFloat(utils.formatUnits(hashratePrice.toString(), erc20Decimals)) });
+    const erc20Decimals = await paymentTokenContract.decimals();
+
+    form.setFieldsValue({ contract: NFT_CONTRACT_ADDRESS, price: parseFloat(utils.formatUnits(hashratePrice.toString(), erc20Decimals)) });
   };
 
   const onFinish = async (values: any) => {
-    if (!hashrateContract || !erc20Contract) return;
+    if (!hashrateContract || !paymentTokenContract) return;
 
     try {
       setBindLoading(true);
-
-      const tx = await erc20Contract.approve(hashrateContractAddress, values.amount * 1e8);
+      console.log('values.amount', values.amount);
+      console.log('utils.parseEther(values.amount):', utils.parseEther(String(values.amount)));
+      const tx = await paymentTokenContract.approve(HASHRATE_CONTRACT_ADDRESS, utils.parseEther(String(values.amount)));
       await tx.wait();
       await hashrateContract.bind(values.contract, values.tokenId, values.volume);
 
@@ -102,32 +105,20 @@ export default () => {
   console.log('token id: ', form.getFieldValue('tokenId'));
 
   return (
-    <div>
-      <h1>Address: {address}</h1>
-
-      <Card>
-        <p>描述: {data.description}</p>
-        <p>算力总量: {data.hashrate_volume}</p>
-        <p>支付类型: {data.payment_type}</p>
-        <p>交付开始日期: {data.jf_start}</p>
-        <p>交付结束日期: {data.jf_end}</p>
-        <p>交割类型: {data.jg_type}</p>
-        <p>交割周琦: {data.jg_period}</p>
-      </Card>
-
-      <Card title="Step 1: Mint NFT(DEV)" style={{ marginTop: 24 }}>
-        <p>NFT Contract: {nftContractAddress}</p>
+    <div style={{ width: 1200, margin: '48px auto' }}>
+      <Card title="Step 1: Mint NFT(DEV)">
+        <p>NFT Contract: {NFT_CONTRACT_ADDRESS}</p>
         <p>Token ID: {showTokenId}</p>
         <Button type="primary" size="large" onClick={handleMint} loading={mintLoading} block disabled={!account}>
           Mint
         </Button>
       </Card>
 
-      <Card style={{ marginTop: 24 }}>
+      <Card title={`Project: ${address}`} style={{ marginTop: 24 }}>
         <Form
           form={form}
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 20 }}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
           onFinish={onFinish}
           autoComplete="off"
           onValuesChange={(changedValues) => {
@@ -149,15 +140,15 @@ export default () => {
           </Form.Item>
 
           <Form.Item label="Volume" name="volume">
-            <InputNumber addonAfter="T" />
+            <InputNumber addonAfter="T" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item label="Hashrate Price" name="price">
-            <InputNumber readOnly addonAfter="USDT/T" disabled />
+            <InputNumber readOnly addonAfter="USDT/T" disabled style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item label="Amount" name="amount">
-            <InputNumber readOnly addonAfter="USDT" disabled />
+            <InputNumber readOnly addonAfter="USDT" disabled style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 4, span: 20 }}>

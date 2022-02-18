@@ -6,7 +6,7 @@ import { utils } from 'ethers';
 import { ChainId, Hardhat, Mainnet, Ropsten, BSCTestnet, DAppProvider, Config } from '@usedapp/core';
 import { shortAddress } from '@/utils';
 import styles from './basic.less';
-import { erc20ContractAddress } from '@/variables';
+import { PAYMENT_TOKEN_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS } from '@/variables';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
 
@@ -33,18 +33,19 @@ const config: Config = {
 
 const BasicLayout: React.FC = ({ children }) => {
   const { activateBrowserWallet, account, chainId } = useEthers();
-  const [tokenBalance, setTokenBalance] = useState<number>();
+  const [tokenBalance, setTokenBalance] = useState<string>();
 
-  const erc20Contract = useContract(erc20ContractAddress, erc20ABI);
+  const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
 
   useEffect(() => {
-    if (!account || !erc20Contract) return;
+    if (!account || !paymentTokenContract) return;
 
     (async () => {
-      const balance = await erc20Contract.balanceOf(account);
-      setTokenBalance(balance.toNumber());
+      const balance = await paymentTokenContract.balanceOf(account);
+
+      setTokenBalance(utils.formatEther(balance));
     })();
-  }, [account, erc20Contract]);
+  }, [account, paymentTokenContract]);
 
   return (
     <Layout className={styles.layout}>
@@ -54,14 +55,25 @@ const BasicLayout: React.FC = ({ children }) => {
         </NavLink>
 
         <span className={styles.menus}>
-          <NavLink to="/projects">Projects</NavLink>
+          <NavLink to="/projects" activeClassName={styles.active}>
+            Projects
+          </NavLink>
+          <NavLink to={`/bind/${HASHRATE_CONTRACT_ADDRESS}`} activeClassName={styles.active}>
+            Bind
+          </NavLink>
+          <NavLink to="/settler" activeClassName={styles.active}>
+            Settler
+          </NavLink>
+          <NavLink to={`/history/${HASHRATE_CONTRACT_ADDRESS}`} activeClassName={styles.active}>
+            History
+          </NavLink>
         </span>
 
         {account ? (
           <span className={styles.wrapAccount}>
             <span>chainId: {chainId}</span>
             <span>Account: {shortAddress(account)}</span>
-            <span>Token Balance: {utils.formatUnits(String(tokenBalance || '0'), 8)}</span>
+            <span>Token Balance: {tokenBalance}</span>
           </span>
         ) : (
           <span className={styles.wrapAccount}>
@@ -80,7 +92,7 @@ const BasicLayout: React.FC = ({ children }) => {
       </Header>
 
       <Content className={styles.content}>{children}</Content>
-      <div className={styles.footer}>v1.0.01</div>
+      <div className={styles.footer}>v1.0.0</div>
     </Layout>
   );
 };
