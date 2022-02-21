@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { utils } from 'ethers';
 import hashrateABI from '@/abis/project.json';
-import { HASHRATE_CONTRACT_ADDRESS } from '@/variables';
 import { useContract } from '@/hooks/useContract';
 import classnames from 'classnames';
 import styles from './index.less';
+
+const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 
 export default () => {
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);

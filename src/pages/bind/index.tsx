@@ -8,8 +8,11 @@ import hashrateABI from '@/abis/project.json';
 import erc20ABI from '@/abis/erc20.json';
 import whitelistABI from '@/abis/whitelist.json';
 import { useContract } from '@/hooks/useContract';
-import { data } from '../projects/index';
-import { NFT_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS, PAYMENT_TOKEN_CONTRACT_ADDRESS, WHITELIST_CONTRACT_ADDRESS } from '@/variables';
+
+const NFT_CONTRACT_ADDRESS = process.env.NFT_CONTRACT_ADDRESS as string;
+const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
+const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
+const WHITELIST_CONTRACT_ADDRESS = process.env.WHITELIST_CONTRACT_ADDRESS as string;
 
 export default () => {
   const { address } = useParams<{ address: string }>();

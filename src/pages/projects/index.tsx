@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { NavLink } from 'umi';
-import { Card } from 'antd';
 import Banner from '@/components/Banner';
 import styles from './index.less';
 
@@ -14,6 +11,13 @@ export const data = {
   jg_type: '交割类型',
   jg_period: '交割周期',
 };
+
+console.log('process.env.NETWORK:', process.env.NETWORK);
+console.log('process.env.SETTLE_TOKEN_CONTRACT_ADDRESS:', process.env.SETTLE_TOKEN_CONTRACT_ADDRESS);
+console.log('process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS:', process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS);
+console.log('process.env.WHITELIST_CONTRACT_ADDRESS:', process.env.WHITELIST_CONTRACT_ADDRESS);
+console.log('process.env.HASHRATE_CONTRACT_ADDRESS:', process.env.NETWORK);
+console.log('process.env.NFT_CONTRACT_ADDRESS:', process.env.NFT_CONTRACT_ADDRESS);
 
 export default function IndexPage() {
   return (

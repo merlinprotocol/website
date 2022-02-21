@@ -6,8 +6,9 @@ import { useEthers } from '@usedapp/core';
 import hashrateABI from '@/abis/project.json';
 import erc20ABI from '@/abis/erc20.json';
 import PaymentSplitterABI from '@/abis/paymentSplitter.json';
-import { SETTLE_TOKEN_CONTRACT_ADDRESS } from '@/variables';
 import { useContract, getContract } from '@/hooks/useContract';
+
+const SETTLE_TOKEN_CONTRACT_ADDRESS = process.env.SETTLE_TOKEN_CONTRACT_ADDRESS as string;
 
 const data = [
   {

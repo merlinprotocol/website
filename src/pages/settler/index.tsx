@@ -4,11 +4,13 @@ import { useEthers } from '@usedapp/core';
 import { ethers, utils, ContractFactory } from 'ethers';
 import erc20ABI from '@/abis/erc20.json';
 import hashrateABI from '@/abis/project.json';
-import { SETTLE_TOKEN_CONTRACT_ADDRESS, PAYMENT_TOKEN_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS } from '@/variables';
 import { useContract } from '@/hooks/useContract';
 import PaymentSplitter from '@/contracts/paymentSplitter.json';
 
 import styles from './index.less';
+
+const SETTLE_TOKEN_CONTRACT_ADDRESS = process.env.SETTLE_TOKEN_CONTRACT_ADDRESS as string;
+const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 
 const { Step } = Steps;
 

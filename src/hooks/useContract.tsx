@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core';
 
 // const network = 'https://data-seed-prebsc-1-s1.binance.org:8545';
-const network = 'http://localhost:8545';
+const network = process.env.NETWORK;
 
 export const getProviderOrSigner = (
   library?: ethers.providers.JsonRpcProvider,

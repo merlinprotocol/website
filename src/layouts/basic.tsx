@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'umi';
-import { Layout, Button } from 'antd';
+import { Layout, Button, ConfigProvider } from 'antd';
 import { useEthers } from '@usedapp/core';
 import { utils } from 'ethers';
 import { ChainId, Hardhat, Mainnet, Ropsten, BSCTestnet, DAppProvider, Config } from '@usedapp/core';
 import { shortAddress } from '@/utils';
 import styles from './basic.less';
-import { PAYMENT_TOKEN_CONTRACT_ADDRESS, HASHRATE_CONTRACT_ADDRESS } from '@/variables';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
+const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
+const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 
 const config: Config = {
   // readOnlyChainId: BSCTestnet.chainId,
@@ -30,6 +31,13 @@ const config: Config = {
     [ChainId.Localhost]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
   },
 };
+
+const customizeRenderEmpty = () => (
+  //这里面就是我们自己定义的空状态
+  <div style={{ textAlign: 'center', color: '#999' }}>
+    <p>No Data</p>
+  </div>
+);
 
 const BasicLayout: React.FC = ({ children }) => {
   const { activateBrowserWallet, account, chainId } = useEthers();
@@ -99,6 +107,8 @@ const BasicLayout: React.FC = ({ children }) => {
 
 export default (props: React.PropsWithChildren<{}>) => (
   <DAppProvider config={config}>
-    <BasicLayout>{props.children}</BasicLayout>
+    <ConfigProvider renderEmpty={customizeRenderEmpty}>
+      <BasicLayout>{props.children}</BasicLayout>
+    </ConfigProvider>
   </DAppProvider>
 );
