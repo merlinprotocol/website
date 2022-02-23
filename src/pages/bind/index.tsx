@@ -95,7 +95,7 @@ export default () => {
       setMintLoading(true);
       if (!nftContract) return;
 
-      const ret = await nftContract.mint(account, '_uri');
+      const ret = await nftContract.mint(account);
       await ret.wait();
       await loadAccountNFT(account);
     } catch (error: any) {

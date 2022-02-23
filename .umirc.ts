@@ -5,14 +5,16 @@ export default defineConfig({
     type: 'none',
   },
 
-  define: {
-    'process.env.NETWORK': 'http://8.210.141.80:3000',
+  history: { type: 'hash' },
 
-    'process.env.SETTLE_TOKEN_CONTRACT_ADDRESS': '0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1',
-    'process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS': '0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44',
-    'process.env.WHITELIST_CONTRACT_ADDRESS': '0x67d269191c92Caf3cD7723F116c85e6E9bf55933',
-    'process.env.HASHRATE_CONTRACT_ADDRESS': '0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E',
-    'process.env.NFT_CONTRACT_ADDRESS': '0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB',
+  define: {
+    'process.env.NETWORK': 'http://8.210.141.80/rpc',
+
+    'process.env.SETTLE_TOKEN_CONTRACT_ADDRESS': '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    'process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS': '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    'process.env.WHITELIST_CONTRACT_ADDRESS': '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853',
+    'process.env.HASHRATE_CONTRACT_ADDRESS': '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+    'process.env.NFT_CONTRACT_ADDRESS': '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
   },
 
   theme: {
@@ -53,6 +55,7 @@ export default defineConfig({
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },
         { path: '/history/:project', component: '@/pages/history' },
+        { path: '/add-network', component: '@/pages/addNetwork' },
       ],
     },
   ],

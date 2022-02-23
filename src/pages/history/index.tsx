@@ -156,6 +156,10 @@ export default () => {
 
     const infos: SettlerInfo[] = [];
     for (let contract of hashrate.settled) {
+      if (contract === '0x0000000000000000000000000000000000000000') {
+        continue;
+      }
+
       const tokenBalance = await settleTokenContract.balanceOf(contract);
       const splitterContract = getContract(contract, PaymentSplitterABI, library, account);
       const totalReleased = await splitterContract['totalReleased(address)'](SETTLE_TOKEN_CONTRACT_ADDRESS);
@@ -163,7 +167,16 @@ export default () => {
       const shares = await splitterContract.shares(account);
       const released = await splitterContract['released(address,address)'](SETTLE_TOKEN_CONTRACT_ADDRESS, account);
 
-      console.log('released: ', released.toString());
+      console.log({
+        contract,
+        tokenBalance: tokenBalance,
+        totalReleased: totalReleased,
+        totalPaied: utils.formatUnits(BigNumber.from(tokenBalance).add(BigNumber.from(totalReleased)).toNumber(), 8),
+        totalShares: totalShares.toNumber(),
+        shares: shares.toNumber(),
+        sold: hashrate.sold,
+        released: released.toString(),
+      });
 
       infos.push({
         contract,

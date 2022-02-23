@@ -8,6 +8,7 @@ import { shortAddress } from '@/utils';
 import styles from './basic.less';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
+import AddNetwork from '@/components/AddNetwork';
 
 const { Header, Content } = Layout;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
@@ -100,7 +101,10 @@ const BasicLayout: React.FC = ({ children }) => {
       </Header>
 
       <Content className={styles.content}>{children}</Content>
-      <div className={styles.footer}>v1.0.0</div>
+      <div className={styles.footer}>
+        <span>v1.0.0</span>
+        <AddNetwork />
+      </div>
     </Layout>
   );
 };

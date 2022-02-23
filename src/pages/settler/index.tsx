@@ -48,30 +48,50 @@ export default () => {
       setSettleLoading(true);
       // step 1: deploy contract
 
-      const signer = library?.getSigner(account);
-      const contractFactory = ContractFactory.fromSolidity(PaymentSplitter, signer as ethers.Signer);
-      const splitterContract = await contractFactory.deploy();
-      console.log('splitterContract.address', splitterContract.address);
-      console.log('tx', splitterContract.deployTransaction);
-      //   await splitterContract.deployTransaction.wait()
+      // const signer = library?.getSigner(account);
+      // const contractFactory = ContractFactory.fromSolidity(PaymentSplitter, signer as ethers.Signer);
+      // const splitterContract = await contractFactory.deploy();
+      // console.log('splitterContract.address', splitterContract.address);
+      // console.log('tx', splitterContract.deployTransaction);
+      // //   await splitterContract.deployTransaction.wait()
 
-      // step 2: Transfer wBTC
-      setCurrent(1);
+      // // step 2: Transfer wBTC
+      // setCurrent(1);
+      // const transferAmount = utils.parseUnits(String(paymentAmount), 8);
+
+      // const tx = await settleTokenContract.approve(account, transferAmount);
+      // await tx.wait();
+
+      // const transferTx = await settleTokenContract.transferFrom(account, splitterContract.address, transferAmount);
+      // await transferTx.wait();
+
+      // // step 3: settle
+      // const settleTx = await hashrateContract.settle(splitterContract.address);
+      // await settleTx.wait();
+
+      // setCurrent(2);
+
+      const settleTx = await hashrateContract.settle();
+      await settleTx.wait();
+      console.log('settleTx', settleTx);
+
+      const splitterAddresses = await hashrateContract.getSettled();
+      const lastSplitter = splitterAddresses[splitterAddresses.length - 1];
+
+      console.log('splitterAddresses:', splitterAddresses);
+
+      // // step 2: Transfer wBTC
+
       const transferAmount = utils.parseUnits(String(paymentAmount), 8);
 
       const tx = await settleTokenContract.approve(account, transferAmount);
       await tx.wait();
 
-      const transferTx = await settleTokenContract.transferFrom(account, splitterContract.address, transferAmount);
+      const transferTx = await settleTokenContract.transferFrom(account, lastSplitter, transferAmount);
       await transferTx.wait();
 
-      // step 3: settle
-      const settleTx = await hashrateContract.settle(splitterContract.address);
-      await settleTx.wait();
-
-      setCurrent(2);
+      message.success('Success!');
     } catch (error) {
-      console.error(error);
     } finally {
       setSettleLoading(false);
     }
