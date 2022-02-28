@@ -55,6 +55,7 @@ export default defineConfig({
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },
         { path: '/history/:project', component: '@/pages/history' },
+        { path: '/calendar', component: '@/pages/calendar' },
         { path: '/add-network', component: '@/pages/addNetwork' },
       ],
     },

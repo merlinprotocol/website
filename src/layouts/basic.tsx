@@ -76,6 +76,9 @@ const BasicLayout: React.FC = ({ children }) => {
           <NavLink to={`/history/${HASHRATE_CONTRACT_ADDRESS}`} activeClassName={styles.active}>
             History
           </NavLink>
+          <NavLink to="/calendar" activeClassName={styles.active}>
+            Calendar
+          </NavLink>
         </span>
 
         {account ? (

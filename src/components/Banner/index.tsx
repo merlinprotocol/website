@@ -5,6 +5,7 @@ import { useConfig, useEthers } from '@usedapp/core';
 import dayjs from 'dayjs';
 import hashrateABI from '@/abis/project.json';
 import { useContract } from '@/hooks/useContract';
+import { getProviderOrSigner } from '@/hooks/useContract';
 import classnames from 'classnames';
 import styles from './index.less';
 
@@ -17,6 +18,7 @@ enum Stage {
   Delivery, // 可以拿首付款
   Final, // 52 之后结束
 }
+const provider = getProviderOrSigner();
 
 export default () => {
   const config = useConfig();
@@ -38,7 +40,11 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    getCurrentBlockTime();
+    getCurrentBlockTime(provider);
+  }, [provider]);
+
+  useEffect(() => {
+    getCurrentBlockTime(library);
   }, [library]);
 
   const setup = async () => {
@@ -85,7 +91,7 @@ export default () => {
     }
   };
 
-  const getCurrentBlockTime = async () => {
+  const getCurrentBlockTime = async (library: any) => {
     try {
       const blockNumber = await library?.send('eth_blockNumber', []);
       const block = await library?.send('eth_getBlockByNumber', [blockNumber, false]);
