@@ -137,9 +137,13 @@ export default () => {
 
     try {
       const supply = await hashrateContract.getSupply();
+      console.log('supply', supply);
+
       const sold = await hashrateContract.getSold();
+      console.log('sold', sold);
+
       const settled = await hashrateContract.getSettled();
-      console.log(settled);
+      console.log('settled', settled);
 
       setHashrate({
         supply: supply.toNumber(),

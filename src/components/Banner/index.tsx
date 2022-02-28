@@ -56,23 +56,24 @@ export default () => {
       const sold = await hashrateContract.getSold();
 
       const startTime = await hashrateContract.startTime();
-      const raiseDuration = await hashrateContract.raiseDuration();
-      const internshipDuration = await hashrateContract.internshipDuration();
+      const raiseDuration = await hashrateContract.collectionPeriodDuration();
+      const internshipDuration = await hashrateContract.observationPeriodDuration();
       const contractDuraction = await hashrateContract.contractDuraction();
-      const firstFundRatio = await hashrateContract.firstFundRatio();
+      // const firstFundRatio = await hashrateContract.firstFundRatio();
       const currentStage = await hashrateContract.currentStage();
 
       const jfStart = startTime.add(raiseDuration).toNumber() * 1000;
       const jfEnd = startTime.add(contractDuraction).toNumber() * 1000;
 
-      console.log('firstFundRatio: ', firstFundRatio.div('100').toNumber());
+      // console.log('firstFundRatio: ', firstFundRatio.div('100').toNumber());
       console.log('raiseDuration: ', raiseDuration.toNumber());
       console.log('startTime: ', startTime.toNumber());
 
       console.log('supply:', supply.toNumber());
       console.log('price:', utils.formatEther(price));
       console.log('sold:', sold.toNumber());
-      console.log('currentStage:', currentStage);
+      console.log('startTime:', startTime.toNumber());
+      // console.log('currentStage:', currentStage);
 
       setHashrate({
         supply: supply.toNumber(),
@@ -82,7 +83,7 @@ export default () => {
         jfStart,
         jfEnd,
         raiseDuration: raiseDuration.toNumber(),
-        firstFundRatio: firstFundRatio.div('100').toNumber(),
+        // firstFundRatio: firstFundRatio.div('100').toNumber(),
         internshipDuration: internshipDuration.toNumber(),
         currentStage,
       });
@@ -97,7 +98,7 @@ export default () => {
       const block = await library?.send('eth_getBlockByNumber', [blockNumber, false]);
       const time = parseInt(block.timestamp);
 
-      console.log('block: ', block);
+      console.log('current block: ', block);
       console.log('timestamp: ', new Date(time * 1000));
       console.log('blockNumber: ', parseInt(blockNumber));
 

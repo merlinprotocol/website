@@ -18,7 +18,7 @@
       },
       {
         "internalType": "address",
-        "name": "miner_",
+        "name": "issuer_",
         "type": "address"
       },
       {
@@ -67,17 +67,17 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "oldMiner_",
+        "name": "old_",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "newMiner_",
+        "name": "new_",
         "type": "address"
       }
     ],
-    "name": "ChangeMiner",
+    "name": "ChangeIssuer",
     "type": "event"
   },
   {
@@ -86,7 +86,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "miner_",
+        "name": "issuer_",
         "type": "address"
       },
       {
@@ -96,7 +96,7 @@
         "type": "uint256"
       }
     ],
-    "name": "ClaimFirstFund",
+    "name": "ClaimInitialPayment",
     "type": "event"
   },
   {
@@ -105,7 +105,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "miner_",
+        "name": "issuer_",
         "type": "address"
       },
       {
@@ -121,7 +121,7 @@
         "type": "uint256"
       }
     ],
-    "name": "ClaimFund",
+    "name": "ClaimPartDeposit",
     "type": "event"
   },
   {
@@ -180,21 +180,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newMiner_",
-        "type": "address"
-      }
-    ],
-    "name": "changeMiner",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "claimFirstFund",
+    "name": "claimInitialPayment",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -207,9 +194,22 @@
         "type": "uint256"
       }
     ],
-    "name": "claimFund",
+    "name": "claimPartDeposit",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectionPeriodDuration",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -230,41 +230,9 @@
     "name": "currentStage",
     "outputs": [
       {
-        "internalType": "enum Project.Stage",
+        "internalType": "enum Stage",
         "name": "",
         "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "firstFundRatio",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "fundClaimeds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -337,7 +305,7 @@
   },
   {
     "inputs": [],
-    "name": "internshipDuration",
+    "name": "initialPaymentRatio",
     "outputs": [
       {
         "internalType": "uint256",
@@ -350,12 +318,25 @@
   },
   {
     "inputs": [],
-    "name": "miner",
+    "name": "issuer",
     "outputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "observationPeriodDuration",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -376,20 +357,20 @@
   },
   {
     "inputs": [],
-    "name": "raiseDuration",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "new_",
+        "type": "address"
+      }
+    ],
+    "name": "setIssuer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
