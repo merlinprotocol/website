@@ -112,7 +112,7 @@ export default () => {
 
           <span>
             Payment Amount:
-            <InputNumber value={paymentAmount} addonAfter="wBTC" onChange={(val) => setPaymentAmount(val)} />
+            <InputNumber size="large" value={paymentAmount} addonAfter="wBTC" onChange={(val) => setPaymentAmount(val)} />
           </span>
 
           <Button onClick={handleSettle} block size="large" type="primary">

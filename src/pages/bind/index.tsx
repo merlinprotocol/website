@@ -144,7 +144,7 @@ export default () => {
       <Card title="Add to whitelist" style={{ marginTop: 48 }} bordered={false}>
         <p>
           Contract:
-          <Input value={inputContract} onChange={(e) => setInputContract(e.target.value)} />
+          <Input size="large" value={inputContract} onChange={(e) => setInputContract(e.target.value)} />
         </p>
 
         <Button type="primary" size="large" onClick={addWhiteList} loading={addLoading} block>
@@ -171,23 +171,23 @@ export default () => {
           }}
         >
           <Form.Item label="NFT Contract Address" name="contract">
-            <Input />
+            <Input size="large" />
           </Form.Item>
 
           <Form.Item label="NFT Token ID" name="tokenId">
-            <Input />
+            <Input size="large" />
           </Form.Item>
 
           <Form.Item label="Volume" name="volume">
-            <InputNumber addonAfter="T" style={{ width: '100%' }} />
+            <InputNumber size="large" addonAfter="T" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item label="Hashrate Price" name="price">
-            <InputNumber readOnly addonAfter="USDT/T" disabled style={{ width: '100%' }} />
+            <InputNumber size="large" readOnly addonAfter="USDT/T" disabled style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item label="Amount" name="amount">
-            <InputNumber readOnly addonAfter="USDT" disabled style={{ width: '100%' }} />
+            <InputNumber size="large" readOnly addonAfter="USDT" disabled style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 4, span: 20 }}>

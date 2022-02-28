@@ -226,7 +226,7 @@ export default () => {
       <div
         style={{
           marginTop: '24px',
-          color: '#999',
+          color: 'rgb(149, 151, 193)',
         }}
       >
         {!!blockTimestamp && <span>Current Block Timestamp: {dayjs(blockTimestamp).format('YYYY.MM.DD HH:mm:ss')}</span>}

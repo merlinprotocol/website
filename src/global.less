@@ -1,3 +1,11 @@
+:root {
+  --primary-color: rgb(120, 120, 166);
+  --secondary-color: rgb(149, 151, 193);
+
+  --primary-bg: rgb(33, 35, 50);
+  --secondary-bg: rgb(212, 212, 211);
+}
+
 body {
   color: #999999;
 }
@@ -6,42 +14,58 @@ body {
   border-bottom: 1px solid transparent;
 }
 .ant-card-body {
-  color: #999;
-}
-
-.ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
-  color: #999;
-}
-.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
   color: #fff;
 }
 
+.ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+  color: var(--primary-color);
+}
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+  color: var(--secondary-color);
+}
+
 .ant-steps-item-wait .ant-steps-item-icon {
-  background-color: #907019;
+  background-color: var(--secondary-bg);
 }
-.ant-steps-item-title::after {
-  background-color: #999 !important;
+// .ant-steps-item-title::after {
+//   background-color: #999 !important;
+// }
+// .ant-input-number-handler-up-inner svg,
+// .ant-input-number-handler-down-inner svg {
+//   color: #999;
+// }
+
+// // Table
+// // ===========
+.ant-table-thead > tr > th {
+  border-bottom: 1px solid transparent;
+  color: var(--primary-color);
 }
-.ant-input-number-handler-up-inner svg,
-.ant-input-number-handler-down-inner svg {
+// .ant-table-tbody > tr > td {
+//   border-bottom: 1px solid transparent;
+// }
+// .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+//   background-color: transparent;
+// }
+// .ant-table-tbody > tr > td {
+//   color: #999;
+// }
+// .ant-table-tbody > tr.ant-table-row:hover > td,
+// .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+//   background: transparent;
+// }
+
+.ant-btn-primary[disabled],
+.ant-btn-primary[disabled]:hover,
+.ant-btn-primary[disabled]:focus,
+.ant-btn-primary[disabled]:active {
+  background-color: var(--secondary-bg);
   color: #999;
 }
 
-// Table
-// ===========
-.ant-table-thead > tr > th {
-  border-bottom: 1px solid transparent;
+.ant-input-number {
+  border: 1px solid var(--primary-bg);
 }
-.ant-table-tbody > tr > td {
-  border-bottom: 1px solid transparent;
-}
-.ant-table-tbody > tr.ant-table-placeholder:hover > td {
-  background-color: transparent;
-}
-.ant-table-tbody > tr > td {
-  color: #999;
-}
-.ant-table-tbody > tr.ant-table-row:hover > td,
-.ant-table-tbody > tr > td.ant-table-cell-row-hover {
-  background: transparent;
+.ant-input-number-disabled {
+  background-color: var(--secondary-bg);
 }

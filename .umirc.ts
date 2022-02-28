@@ -18,31 +18,30 @@ export default defineConfig({
   },
 
   theme: {
-    '@primary-color': '#f1b90c',
-    '@disabled-bg': '#907019',
-    '@disabled-color': '#efefef',
-    '@border-color-base': '#222222',
-    '@height-base': '40px',
+    '@primary-color': 'rgb(120,120,166)',
+    //   '@disabled-bg': '#907019',
+    //   '@disabled-color': '#efefef',
+    //   '@border-color-base': '#222222',
+    //   '@height-base': '40px',
 
-    '@card-head-color': '#999999',
-    '@card-head-background': '#222122',
-    '@card-background': '#222122',
+    '@card-head-color': '#fff',
+    '@card-head-background': 'rgb(33, 35, 50)',
+    '@card-background': 'rgb(33, 35, 50)',
     '@card-radius': '24px',
 
-    '@label-color': '#999999',
+    '@label-color': 'rgb(149, 151, 193)',
 
-    '@input-bg': '#161616',
-    '@input-color': '#f1b90c',
-    '@input-border-color': '#222122',
-    '@input-height-base': '40px',
-    '@input-addon-bg': '#161616',
+    '@input-bg': 'rgb(149, 151, 193)',
+    '@input-color': '#fff',
+    '@input-border-color': 'rgb(33, 35, 50)',
+    '@input-addon-bg': 'rgb(149, 151, 193)',
 
-    '@input-number-handler-bg': '#222222',
+    //   '@input-number-handler-bg': '#222222',
 
-    '@table-bg': '#222122',
-    '@table-header-bg': '#1a1a1a',
-    '@table-header-color': '#f1b90c',
-    '@table-border-radius-base': '24px',
+    //   '@table-bg': '#222122',
+    '@table-header-bg': 'rgb(33, 35, 50)',
+    //   '@table-header-color': '#f1b90c',
+    //   '@table-border-radius-base': '24px',
   },
 
   routes: [
