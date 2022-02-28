@@ -110,7 +110,50 @@
     margin-top: 8px;
     height: 8px;
     border-radius: 8px;
-    background: linear-gradient(to right, var(--secondary-color) 0%, var(--secondary-color) 60%, #fff 60%);
+    // background: linear-gradient(to right, var(--secondary-color) 0%, var(--secondary-color) 60%, #fff 60%);
+  }
+}
+
+.stageBar {
+  position: relative;
+  margin-top: 8px;
+  height: 8px;
+  border-radius: 8px;
+  margin-bottom: 48px;
+
+  background: linear-gradient(
+    to right,
+    rgb(212, 212, 211) 0%,
+    rgb(212, 212, 211) 25%,
+    rgb(149, 151, 193) 25%,
+    rgb(149, 151, 193) 50%,
+    rgb(187, 75, 141) 50%,
+    rgb(187, 75, 141) 75%,
+    rgb(52, 54, 151) 75%,
+    rgb(52, 54, 151) 100%
+  );
+
+  span {
+    position: absolute;
+    bottom: -20px;
+    color: #fff;
+    transform: translateX(-50%);
+  }
+
+  .stageNone {
+    left: 0;
+  }
+  .CollectionPeriod {
+    left: 25%;
+  }
+  .ObservationPeriod {
+    left: 50%;
+  }
+  .OperatingPeriod {
+    left: 75%;
+  }
+  .Final {
+    left: 100%;
   }
 }
 

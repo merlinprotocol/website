@@ -35,6 +35,8 @@ export default () => {
     jfStart: undefined,
   });
 
+  const [process, setProcess] = useState(0);
+
   useEffect(() => {
     setup();
   }, []);
@@ -46,6 +48,15 @@ export default () => {
   useEffect(() => {
     getCurrentBlockTime(library);
   }, [library]);
+
+  useEffect(() => {
+    if (hashrate) {
+      console.log(hashrate.sold * hashrate.price);
+      console.log(hashrate.supply * hashrate.price);
+      const _process = (hashrate.sold * hashrate.price) / (hashrate.supply * hashrate.price);
+      setProcess(_process || 0);
+    }
+  }, [hashrate]);
 
   const setup = async () => {
     if (!hashrateContract) return;
@@ -211,12 +222,25 @@ export default () => {
           <span>Current Pool</span>
         </div>
 
-        <div className={styles.processBar}>{/* process */}</div>
+        <div
+          style={{
+            background: `linear-gradient(to right, var(--secondary-color) 0%, var(--secondary-color) ${process * 100}%, #fff  ${process * 100}%)`,
+          }}
+          className={styles.processBar}
+        ></div>
 
         <div className={styles.labels}>
-          <span>0%</span>
-          <span>0 IDO</span>
+          <span>{process * 100}%</span>
         </div>
+      </div>
+
+      <div style={{ marginTop: '24px' }}>Stage</div>
+      <div className={styles.stageBar}>
+        <span className={styles.stageNone}>None</span>
+        <span className={styles.CollectionPeriod}>CollectionPeriod</span>
+        <span className={styles.ObservationPeriod}> ObservationPeriod</span>
+        <span className={styles.OperatingPeriod}>OperatingPeriod</span>
+        <span className={styles.Final}>Final</span>
       </div>
 
       {/* <div className={styles.formContent}>
