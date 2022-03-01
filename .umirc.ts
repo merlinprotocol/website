@@ -5,6 +5,14 @@ export default defineConfig({
     type: 'none',
   },
 
+  proxy: {
+    '/api/': {
+      target: 'http://8.210.141.80:3000',
+      changeOrigin: true,
+      secure: false,
+    },
+  },
+
   history: { type: 'hash' },
 
   define: {

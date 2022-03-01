@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'umi';
-import { Form, Input, Button, InputNumber, Card, message } from 'antd';
+import { Form, Input, Button, InputNumber, Card, message, Select } from 'antd';
 import { utils, BigNumber } from 'ethers';
 import { useEthers } from '@usedapp/core';
 import NFTABI from '@/abis/NFT.json';
@@ -8,6 +8,9 @@ import hashrateABI from '@/abis/project.json';
 import erc20ABI from '@/abis/erc20.json';
 import whitelistABI from '@/abis/whitelist.json';
 import { useContract } from '@/hooks/useContract';
+import useOwnerNFTs from '@/hooks/useOwnerNFTs';
+
+const { Option } = Select;
 
 const NFT_CONTRACT_ADDRESS = process.env.NFT_CONTRACT_ADDRESS as string;
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
@@ -16,12 +19,16 @@ const WHITELIST_CONTRACT_ADDRESS = process.env.WHITELIST_CONTRACT_ADDRESS as str
 
 export default () => {
   const { address } = useParams<{ address: string }>();
+
+  const { account } = useEthers();
+  const ownerNFTs = useOwnerNFTs(account);
+
+  console.log('ownerNFTs:', ownerNFTs);
+
   const nftContract = useContract(NFT_CONTRACT_ADDRESS, NFTABI);
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
   const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
   const whitelistContract = useContract(WHITELIST_CONTRACT_ADDRESS, whitelistABI);
-
-  const { account } = useEthers();
 
   const [mintLoading, setMintLoading] = useState(false);
   const [bindLoading, setBindLoading] = useState(false);
@@ -175,7 +182,21 @@ export default () => {
           </Form.Item>
 
           <Form.Item label="NFT Token ID" name="tokenId">
-            <Input size="large" />
+            {/* <Input size="large" /> */}
+
+            <Select
+              size="large"
+              onChange={(val) => {
+                form.setFieldsValue({ tokenId: val });
+              }}
+            >
+              {ownerNFTs.map((nft) => (
+                <Option key={nft.image} value={nft.tokenId}>
+                  <img src={nft.image} alt="" style={{ width: '25px', height: '25px' }} />
+                  <span>{nft.name}</span>
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item label="Volume" name="volume">
