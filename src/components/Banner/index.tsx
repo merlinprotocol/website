@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import hashrateABI from '@/abis/project.json';
 import { useContract } from '@/hooks/useContract';
 import { getProviderOrSigner } from '@/hooks/useContract';
+import { ArrowDownOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
 import styles from './index.less';
 
@@ -84,7 +85,7 @@ export default () => {
       console.log('price:', utils.formatEther(price));
       console.log('sold:', sold.toNumber());
       console.log('startTime:', startTime.toNumber());
-      // console.log('currentStage:', currentStage);
+      console.log('currentStage:', currentStage);
 
       setHashrate({
         supply: supply.toNumber(),
@@ -234,13 +235,30 @@ export default () => {
         </div>
       </div>
 
-      <div style={{ marginTop: '24px' }}>Stage</div>
+      <div style={{ marginTop: '48px' }}></div>
       <div className={styles.stageBar}>
         <span className={styles.stageNone}>None</span>
         <span className={styles.CollectionPeriod}>CollectionPeriod</span>
         <span className={styles.ObservationPeriod}> ObservationPeriod</span>
         <span className={styles.OperatingPeriod}>OperatingPeriod</span>
         <span className={styles.Final}>Final</span>
+
+        <span
+          className={styles.arrow}
+          style={{
+            left: !hashrate.currentStage
+              ? '0%'
+              : hashrate.currentStage === 1
+              ? '2%'
+              : hashrate.currentStage === 2
+              ? '8%'
+              : hashrate.currentStage === 3
+              ? '98%'
+              : '100%',
+          }}
+        >
+          <ArrowDownOutlined />
+        </span>
       </div>
 
       {/* <div className={styles.formContent}>

@@ -124,18 +124,18 @@
   background: linear-gradient(
     to right,
     rgb(212, 212, 211) 0%,
-    rgb(212, 212, 211) 25%,
-    rgb(149, 151, 193) 25%,
-    rgb(149, 151, 193) 50%,
-    rgb(187, 75, 141) 50%,
-    rgb(187, 75, 141) 75%,
-    rgb(52, 54, 151) 75%,
+    rgb(212, 212, 211) 2%,
+    rgb(149, 151, 193) 2%,
+    rgb(149, 151, 193) 8%,
+    rgb(187, 75, 141) 8%,
+    rgb(187, 75, 141) 98%,
+    rgb(52, 54, 151) 98%,
     rgb(52, 54, 151) 100%
   );
 
   span {
     position: absolute;
-    bottom: -20px;
+    bottom: -30px;
     color: #fff;
     transform: translateX(-50%);
   }
@@ -144,16 +144,22 @@
     left: 0;
   }
   .CollectionPeriod {
-    left: 25%;
+    left: 2%;
+    bottom: 20px;
   }
   .ObservationPeriod {
-    left: 50%;
+    left: 8%;
   }
   .OperatingPeriod {
-    left: 75%;
+    left: 98%;
+    bottom: 20px;
   }
   .Final {
     left: 100%;
+  }
+
+  .arrow {
+    bottom: 40px;
   }
 }
 
