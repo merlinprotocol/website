@@ -6,11 +6,14 @@ import dayjs from 'dayjs';
 import hashrateABI from '@/abis/project.json';
 import { useContract } from '@/hooks/useContract';
 import { getProviderOrSigner } from '@/hooks/useContract';
-import { ArrowDownOutlined } from '@ant-design/icons';
+import BuyModal from '../BuyModal';
+import moment from 'moment';
 import classnames from 'classnames';
 import styles from './index.less';
 
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
+
+const endTime = '2022-03-10';
 
 enum Stage {
   None,
@@ -37,6 +40,19 @@ export default () => {
   });
 
   const [process, setProcess] = useState(0);
+
+  const [duration, setDuration] = useState<any>(null);
+
+  // 倒计时
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const ms = moment().diff(endTime);
+
+      setDuration(moment.duration(ms * -1));
+    }, 50);
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     setup();
@@ -158,11 +174,21 @@ export default () => {
           <span className={styles.infotItemValue}>{hashrate.price} USDT</span>
         </div>
         <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Unit</span>
-          <span className={styles.infotItemValue}>USDT</span>
+          <span className={styles.infotItemLabel}>Miner period</span>
+          <span className={styles.infotItemValue}>1 Year</span>
         </div>
 
-        <div className={styles.infoItem}>
+        {duration && (
+          <div className={styles.wrapDuration}>
+            <span>{duration.days()} days</span>
+            <span>{duration.hours()} hours</span>
+            <span>{duration.minutes()} minutes</span>
+            <span>{duration.seconds()} seconds</span>
+            <span>{duration.milliseconds()} ms</span>
+          </div>
+        )}
+
+        {/* <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Hashpower for sale</span>
           <span className={styles.infotItemValue}>{hashrate.supply - hashrate.sold} TH/s</span>
         </div>
@@ -175,9 +201,9 @@ export default () => {
           <span className={styles.infotItemValue}>
             {hashrate.sold * hashrate.price} / {hashrate.supply * hashrate.price} USDT
           </span>
-        </div>
+        </div> */}
 
-        <div className={styles.infoItem}>
+        {/* <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Initial payment</span>
           <span className={styles.infotItemValue}>2,350,000</span>
         </div>
@@ -188,9 +214,9 @@ export default () => {
         <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Observation period</span>
           <span className={styles.infotItemValue}>{hashrate.internshipDuration / 3600 / 24 / 7} Week</span>
-        </div>
+        </div> */}
 
-        <div className={styles.infoItem}>
+        {/* <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Delivery start time</span>
           {hashrate.jfStart && <span className={styles.infotItemValue}>{dayjs(hashrate.jfStart).format('YYYY.MM.DD')}</span>}
         </div>
@@ -214,13 +240,13 @@ export default () => {
         <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Delivery times</span>
           <span className={styles.infotItemValue}>48 Times</span>
-        </div>
+        </div> */}
       </div>
 
       <div className={styles.processContent}>
         <div className={styles.labels}>
-          <span>Process: {hashrate.currentStage}</span>
-          <span>Current Pool</span>
+          <span>Sold process</span>
+          {/* <span>Current Pool</span> */}
         </div>
 
         <div
@@ -235,7 +261,7 @@ export default () => {
         </div>
       </div>
 
-      <div style={{ marginTop: '48px' }}></div>
+      {/* <div style={{ marginTop: '48px' }}></div>
       <div className={styles.stageBar}>
         <span className={styles.stageNone}>None</span>
         <span className={styles.CollectionPeriod}>CollectionPeriod</span>
@@ -259,21 +285,27 @@ export default () => {
         >
           <ArrowDownOutlined />
         </span>
-      </div>
+      </div> */}
 
       {/* <div className={styles.formContent}>
         <input type="text" placeholder="ETH Amount to Invest" />
         <button>Invest Now</button>
       </div> */}
 
-      <div
+      {/* <div
         style={{
           marginTop: '24px',
           color: 'rgb(149, 151, 193)',
         }}
       >
         {!!blockTimestamp && <span>Current Block Timestamp: {dayjs(blockTimestamp).format('YYYY.MM.DD HH:mm:ss')}</span>}
-      </div>
+      </div> */}
+
+      <BuyModal>
+        <Button type="primary" block size="large" style={{ marginTop: '24px' }}>
+          Get Hashrate
+        </Button>
+      </BuyModal>
     </div>
   );
 };
