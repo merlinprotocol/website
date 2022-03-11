@@ -6,6 +6,7 @@ import erc721ABI from '@/abis/NFT.json';
 export default (account: string | null | undefined) => {
   const [NFTs, setNFTs] = useState<any[]>([]);
   const whiteList = useWhiteList();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!account) return;
@@ -15,14 +16,20 @@ export default (account: string | null | undefined) => {
   }, [account, whiteList]);
 
   const loadOwnerNFTs = async () => {
+    setLoading(true);
+
     const tokens = [];
 
     for (let i = 0; i < whiteList.length; i++) {
       try {
-        const erc721Contract = getContract(whiteList[i], erc721ABI);
-        console.log('account', account);
-        console.log('whiteList[i]', whiteList[i]);
+        const nftAddress = whiteList[i];
+        const erc721Contract = getContract(nftAddress, erc721ABI);
+        console.log('erc721Contract:', erc721Contract);
+
         const balance = await erc721Contract.balanceOf(account);
+
+        console.log('account', account);
+        console.log('nftAddress', nftAddress);
         console.log('balance', balance);
 
         if (balance === 0) {
@@ -38,6 +45,7 @@ export default (account: string | null | undefined) => {
             const image = `https://gateway.pinata.cloud/ipfs/QmcMEyJQFJqc8dREyG1JH4gdn5utU6Ti8tfUoht3KtqBap/${tokenId}.png`;
 
             tokens.push({
+              contract: whiteList[i],
               tokenId: tokenId.toNumber(),
               tokenURI,
               image,
@@ -47,13 +55,21 @@ export default (account: string | null | undefined) => {
             continue;
           }
         }
+
+        console.log('owner nfts:', tokens);
       } catch (error) {
+        console.error(error);
         continue;
       }
     }
 
     setNFTs(tokens);
+
+    setLoading(false);
   };
 
-  return NFTs;
+  return {
+    nfts: NFTs,
+    loading,
+  };
 };

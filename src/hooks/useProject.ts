@@ -5,6 +5,7 @@ import { useContract } from '@/hooks/useContract';
 import hashrateABI from '@/abis/project.json';
 
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
+console.log('HASHRATE_CONTRACT_ADDRESS:', HASHRATE_CONTRACT_ADDRESS);
 
 enum Stage {
   None,
@@ -14,13 +15,13 @@ enum Stage {
   Final, // 52 之后结束
 }
 
-interface ProjectInfo {
+export interface ProjectInfo {
   supply: BigNumber;
   price: BigNumber;
   sold: BigNumber;
-  raiseDuration: BigNumber;
-  firstFundRatio: BigNumber;
-  internshipDuration: BigNumber;
+  collectionPeriodDuration: BigNumber;
+  initialPaymentRatio: BigNumber;
+  observationPeriodDuration: BigNumber;
   contractDuraction: BigNumber;
 
   startTime: moment.Moment;
@@ -36,8 +37,15 @@ export default () => {
 
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
 
+  useEffect(() => {
+    console.log('init');
+    init();
+  }, [hashrateContract]);
+
   const init = async () => {
     if (!hashrateContract) return;
+
+    console.log('hashrateContract', hashrateContract);
 
     try {
       const supply = await hashrateContract.getSupply();
@@ -45,40 +53,51 @@ export default () => {
       const sold = await hashrateContract.getSold();
 
       const startTime = await hashrateContract.startTime();
-      const raiseDuration = await hashrateContract.raiseDuration();
-      const internshipDuration = await hashrateContract.internshipDuration();
+      const collectionPeriodDuration = await hashrateContract.collectionPeriodDuration();
+      const observationPeriodDuration = await hashrateContract.observationPeriodDuration();
       const contractDuraction = await hashrateContract.contractDuraction();
-      const firstFundRatio = await hashrateContract.firstFundRatio();
+      const initialPaymentRatio = await hashrateContract.initialPaymentRatio();
       const currentStage = await hashrateContract.currentStage();
 
-      const deliveryStart = startTime.add(raiseDuration).toNumber();
+      const deliveryStart = startTime.add(collectionPeriodDuration).toNumber();
       const deliveryEnd = startTime.add(contractDuraction).toNumber();
 
       const startTimeMoment = moment(startTime.mul('1000').toNumber());
 
-      setProject({
+      console.log('project: ', {
         supply,
         price,
         sold,
-        raiseDuration,
-        internshipDuration,
+        collectionPeriodDuration,
+        observationPeriodDuration,
         contractDuraction,
-        firstFundRatio,
+        initialPaymentRatio,
         currentStage,
         deliveryStart: moment(deliveryStart * 1000),
         deliveryEnd: moment(deliveryEnd * 1000),
         startTime: startTimeMoment,
         raiseStart: startTimeMoment,
-        raiseEnd: startTimeMoment.clone().add(raiseDuration, 'seconds'),
+        raiseEnd: startTimeMoment.clone().add(collectionPeriodDuration, 'seconds'),
+      });
+      setProject({
+        supply,
+        price,
+        sold,
+        collectionPeriodDuration,
+        observationPeriodDuration,
+        contractDuraction,
+        initialPaymentRatio,
+        currentStage,
+        deliveryStart: moment(deliveryStart * 1000),
+        deliveryEnd: moment(deliveryEnd * 1000),
+        startTime: startTimeMoment,
+        raiseStart: startTimeMoment,
+        raiseEnd: startTimeMoment.clone().add(collectionPeriodDuration, 'seconds'),
       });
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    init();
-  }, [hashrateContract]);
-
-  return project;
+  return { project, init };
 };

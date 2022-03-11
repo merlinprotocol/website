@@ -1,124 +1,47 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { utils } from 'ethers';
-import { useConfig, useEthers } from '@usedapp/core';
-import dayjs from 'dayjs';
-import hashrateABI from '@/abis/project.json';
-import { useContract } from '@/hooks/useContract';
-import { getProviderOrSigner } from '@/hooks/useContract';
+import { useEthers } from '@usedapp/core';
 import BuyModal from '../BuyModal';
 import moment from 'moment';
+import useProject from '@/hooks/useProject';
 import classnames from 'classnames';
 import styles from './index.less';
 
-const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
-
-const endTime = '2022-03-10';
-
-enum Stage {
-  None,
-  Raise, // starttime + 1week, 过了这个时间才可以结算
-  Internship, // starttime + 4week 观察期，之后可以拿首付款
-  Delivery, // 可以拿首付款
-  Final, // 52 之后结束
-}
-const provider = getProviderOrSigner();
-
 export default () => {
-  const config = useConfig();
-  const { library } = useEthers();
-
-  const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
-  const [blockTimestamp, setBlockTimestamp] = useState(0);
-
-  const [hashrate, setHashrate] = useState<any>({
-    supply: undefined,
-    price: undefined,
-    sold: undefined,
-    startTime: undefined,
-    jfStart: undefined,
-  });
-
+  const { library, account } = useEthers();
+  const { project, init } = useProject();
   const [process, setProcess] = useState(0);
-
   const [duration, setDuration] = useState<any>(null);
 
   // 倒计时
   useEffect(() => {
+    if (!project?.raiseEnd) return;
+    console.log('setInterval');
+
+    console.log('start time:', project.startTime.format('YYYY-MM-DD HH:mm:ss'));
+    console.log('raise end:', project.raiseEnd.format('YYYY-MM-DD HH:mm:ss'));
     const timer = setInterval(() => {
-      const ms = moment().diff(endTime);
+      const ms = moment().diff(project.raiseEnd);
 
       setDuration(moment.duration(ms * -1));
-    }, 50);
-
+    }, 1000);
     return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    setup();
-  }, []);
-
-  useEffect(() => {
-    getCurrentBlockTime(provider);
-  }, [provider]);
+  }, [project?.raiseEnd]);
 
   useEffect(() => {
     getCurrentBlockTime(library);
   }, [library]);
 
   useEffect(() => {
-    if (hashrate) {
-      console.log(hashrate.sold * hashrate.price);
-      console.log(hashrate.supply * hashrate.price);
-      const _process = (hashrate.sold * hashrate.price) / (hashrate.supply * hashrate.price);
-      setProcess(_process || 0);
+    if (project?.sold) {
+      console.log('project.sold:', project.sold.toNumber());
+      console.log('project.supply:', project.supply.toNumber());
+      console.log('project.process:', project.sold.div(project.supply.toNumber()).toString());
+
+      setProcess(project.sold.toNumber() / project.supply.toNumber());
     }
-  }, [hashrate]);
-
-  const setup = async () => {
-    if (!hashrateContract) return;
-
-    try {
-      const supply = await hashrateContract.getSupply();
-      const price = await hashrateContract.getPrice();
-      const sold = await hashrateContract.getSold();
-
-      const startTime = await hashrateContract.startTime();
-      const raiseDuration = await hashrateContract.collectionPeriodDuration();
-      const internshipDuration = await hashrateContract.observationPeriodDuration();
-      const contractDuraction = await hashrateContract.contractDuraction();
-      // const firstFundRatio = await hashrateContract.firstFundRatio();
-      const currentStage = await hashrateContract.currentStage();
-
-      const jfStart = startTime.add(raiseDuration).toNumber() * 1000;
-      const jfEnd = startTime.add(contractDuraction).toNumber() * 1000;
-
-      // console.log('firstFundRatio: ', firstFundRatio.div('100').toNumber());
-      console.log('raiseDuration: ', raiseDuration.toNumber());
-      console.log('startTime: ', startTime.toNumber());
-
-      console.log('supply:', supply.toNumber());
-      console.log('price:', utils.formatEther(price));
-      console.log('sold:', sold.toNumber());
-      console.log('startTime:', startTime.toNumber());
-      console.log('currentStage:', currentStage);
-
-      setHashrate({
-        supply: supply.toNumber(),
-        price: utils.formatEther(price),
-        sold: sold.toNumber(),
-        startTime: startTime.toNumber(),
-        jfStart,
-        jfEnd,
-        raiseDuration: raiseDuration.toNumber(),
-        // firstFundRatio: firstFundRatio.div('100').toNumber(),
-        internshipDuration: internshipDuration.toNumber(),
-        currentStage,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }, [project?.sold]);
 
   const getCurrentBlockTime = async (library: any) => {
     try {
@@ -126,11 +49,9 @@ export default () => {
       const block = await library?.send('eth_getBlockByNumber', [blockNumber, false]);
       const time = parseInt(block.timestamp);
 
-      console.log('current block: ', block);
-      console.log('timestamp: ', new Date(time * 1000));
-      console.log('blockNumber: ', parseInt(blockNumber));
+      console.log('block time:', moment(time * 1000).format('YYYY.MM.DD HH:mm:ss'));
 
-      setBlockTimestamp(time * 1000);
+      // setBlockTimestamp(time * 1000);
     } catch (error) {}
   };
 
@@ -167,15 +88,15 @@ export default () => {
       <div className={styles.infoContent}>
         <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Total hashpower supply</span>
-          <span className={styles.infotItemValue}>{hashrate.supply} TH/s</span>
+          <span className={styles.infotItemValue}>{project?.supply.toNumber()} TH/s</span>
         </div>
         <div className={classnames(styles.infoItem, styles.center)}>
           <span className={styles.infotItemLabel}>Price</span>
-          <span className={styles.infotItemValue}>{hashrate.price} USDT</span>
+          <span className={styles.infotItemValue}>{utils.formatEther(project?.price.toString() || '0')} USDT</span>
         </div>
         <div className={styles.infoItem}>
           <span className={styles.infotItemLabel}>Miner period</span>
-          <span className={styles.infotItemValue}>1 Year</span>
+          <span className={styles.infotItemValue}>{project?.contractDuraction.div(3600).div(24).toNumber()} Days</span>
         </div>
 
         {duration && (
@@ -184,63 +105,9 @@ export default () => {
             <span>{duration.hours()} hours</span>
             <span>{duration.minutes()} minutes</span>
             <span>{duration.seconds()} seconds</span>
-            <span>{duration.milliseconds()} ms</span>
+            {/* <span>{duration.milliseconds()} ms</span> */}
           </div>
         )}
-
-        {/* <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Hashpower for sale</span>
-          <span className={styles.infotItemValue}>{hashrate.supply - hashrate.sold} TH/s</span>
-        </div>
-        <div className={classnames(styles.infoItem, styles.center)}>
-          <span className={styles.infotItemLabel}>Hashpower sold</span>
-          <span className={styles.infotItemValue}>{hashrate.sold} TH/s</span>
-        </div>
-        <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Funding process</span>
-          <span className={styles.infotItemValue}>
-            {hashrate.sold * hashrate.price} / {hashrate.supply * hashrate.price} USDT
-          </span>
-        </div> */}
-
-        {/* <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Initial payment</span>
-          <span className={styles.infotItemValue}>2,350,000</span>
-        </div>
-        <div className={classnames(styles.infoItem, styles.center)}>
-          <span className={styles.infotItemLabel}>Initial payment ratio</span>
-          {hashrate.firstFundRatio && <span className={styles.infotItemValue}>{hashrate.firstFundRatio}%</span>}
-        </div>
-        <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Observation period</span>
-          <span className={styles.infotItemValue}>{hashrate.internshipDuration / 3600 / 24 / 7} Week</span>
-        </div> */}
-
-        {/* <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Delivery start time</span>
-          {hashrate.jfStart && <span className={styles.infotItemValue}>{dayjs(hashrate.jfStart).format('YYYY.MM.DD')}</span>}
-        </div>
-        <div className={classnames(styles.infoItem, styles.center)}>
-          <span className={styles.infotItemLabel}>Delivery end time</span>
-          <span className={styles.infotItemValue}>{dayjs(hashrate.jfEnd).format('YYYY.MM.DD')}</span>
-        </div>
-        <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Deilvery cycle</span>
-          <span className={styles.infotItemValue}>{hashrate.raiseDuration / 3600 / 24} Day</span>
-        </div>
-
-        <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Deposit account balance</span>
-          <span className={styles.infotItemValue}>1,000,000 USDT</span>
-        </div>
-        <div className={classnames(styles.infoItem, styles.center)}>
-          <span className={styles.infotItemLabel}>Option account balance</span>
-          <span className={styles.infotItemValue}>1,000,000 USDT</span>
-        </div>
-        <div className={styles.infoItem}>
-          <span className={styles.infotItemLabel}>Delivery times</span>
-          <span className={styles.infotItemValue}>48 Times</span>
-        </div> */}
       </div>
 
       <div className={styles.processContent}>
@@ -261,48 +128,8 @@ export default () => {
         </div>
       </div>
 
-      {/* <div style={{ marginTop: '48px' }}></div>
-      <div className={styles.stageBar}>
-        <span className={styles.stageNone}>None</span>
-        <span className={styles.CollectionPeriod}>CollectionPeriod</span>
-        <span className={styles.ObservationPeriod}> ObservationPeriod</span>
-        <span className={styles.OperatingPeriod}>OperatingPeriod</span>
-        <span className={styles.Final}>Final</span>
-
-        <span
-          className={styles.arrow}
-          style={{
-            left: !hashrate.currentStage
-              ? '0%'
-              : hashrate.currentStage === 1
-              ? '2%'
-              : hashrate.currentStage === 2
-              ? '8%'
-              : hashrate.currentStage === 3
-              ? '98%'
-              : '100%',
-          }}
-        >
-          <ArrowDownOutlined />
-        </span>
-      </div> */}
-
-      {/* <div className={styles.formContent}>
-        <input type="text" placeholder="ETH Amount to Invest" />
-        <button>Invest Now</button>
-      </div> */}
-
-      {/* <div
-        style={{
-          marginTop: '24px',
-          color: 'rgb(149, 151, 193)',
-        }}
-      >
-        {!!blockTimestamp && <span>Current Block Timestamp: {dayjs(blockTimestamp).format('YYYY.MM.DD HH:mm:ss')}</span>}
-      </div> */}
-
-      <BuyModal>
-        <Button type="primary" block size="large" style={{ marginTop: '24px' }}>
+      <BuyModal project={project} onOk={init}>
+        <Button type="primary" block size="large" style={{ marginTop: '24px' }} disabled={!account}>
           Get Hashrate
         </Button>
       </BuyModal>

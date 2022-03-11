@@ -30,6 +30,7 @@ const config: Config = {
     [ChainId.BSCTestnet]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
     [ChainId.Hardhat]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
     [ChainId.Localhost]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
+    [ChainId.Rinkeby]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
   },
 };
 
