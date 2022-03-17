@@ -17,10 +17,11 @@ const client = new ApolloClient({
 });
 
 export default () => {
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<any[]>([process.env.NFT_CONTRACT_ADDRESS]);
 
   useEffect(() => {
-    init();
+    // TODO
+    // init();
   }, []);
 
   const init = async () => {

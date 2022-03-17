@@ -37,8 +37,13 @@ export default () => {
     })();
   }, [account, settleTokenContract]);
 
-  const handleSettle = async () => {
-    if (!account || !settleTokenContract || !hashrateContract) return;
+  const handleSettle = async (idx: number = 0) => {
+    console.log('handleSettle');
+    if (!account || !settleTokenContract || !hashrateContract) {
+      console.log({ account, settleTokenContract, hashrateContract });
+      message.error('some error');
+      return;
+    }
 
     if (!paymentAmount) {
       return message.info('Input Payment Amount');
@@ -71,27 +76,30 @@ export default () => {
 
       // setCurrent(2);
 
-      const settleTx = await hashrateContract.settle();
+      const transferAmount = utils.parseUnits(String(paymentAmount), 8);
+      console.log('idx:', idx);
+      console.log('transferAmount:', transferAmount, transferAmount.toString());
+
+      const settleTx = await hashrateContract.settle(idx, transferAmount.toString());
       await settleTx.wait();
       console.log('settleTx', settleTx);
 
-      const splitterAddresses = await hashrateContract.getSettled();
-      const lastSplitter = splitterAddresses[splitterAddresses.length - 1];
+      // const splitterAddresses = await hashrateContract.getSettled();
+      // const lastSplitter = splitterAddresses[splitterAddresses.length - 1];
 
-      console.log('splitterAddresses:', splitterAddresses);
+      // console.log('splitterAddresses:', splitterAddresses);
 
       // // step 2: Transfer wBTC
 
-      const transferAmount = utils.parseUnits(String(paymentAmount), 8);
+      // const tx = await settleTokenContract.approve(account, transferAmount);
+      // await tx.wait();
 
-      const tx = await settleTokenContract.approve(account, transferAmount);
-      await tx.wait();
-
-      const transferTx = await settleTokenContract.transferFrom(account, lastSplitter, transferAmount);
-      await transferTx.wait();
+      // const transferTx = await settleTokenContract.transferFrom(account, lastSplitter, transferAmount);
+      // await transferTx.wait();
 
       message.success('Success!');
     } catch (error) {
+      console.error(error);
     } finally {
       setSettleLoading(false);
     }
@@ -115,7 +123,7 @@ export default () => {
             <InputNumber size="large" value={paymentAmount} addonAfter="wBTC" onChange={(val) => setPaymentAmount(val)} />
           </span>
 
-          <Button onClick={handleSettle} block size="large" type="primary">
+          <Button onClick={() => handleSettle(0)} block size="large" type="primary">
             Settle
           </Button>
         </div>

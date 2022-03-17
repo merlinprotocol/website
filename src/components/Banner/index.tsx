@@ -5,6 +5,7 @@ import { useEthers } from '@usedapp/core';
 import BuyModal from '../BuyModal';
 import moment from 'moment';
 import useProject from '@/hooks/useProject';
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import styles from './index.less';
 
@@ -13,17 +14,16 @@ export default () => {
   const { project, init } = useProject();
   const [process, setProcess] = useState(0);
   const [duration, setDuration] = useState<any>(null);
+  const [blockTimestamp, setBlockTimestamp] = useState(0);
 
   // 倒计时
   useEffect(() => {
     if (!project?.raiseEnd) return;
     console.log('setInterval');
-
     console.log('start time:', project.startTime.format('YYYY-MM-DD HH:mm:ss'));
     console.log('raise end:', project.raiseEnd.format('YYYY-MM-DD HH:mm:ss'));
     const timer = setInterval(() => {
       const ms = moment().diff(project.raiseEnd);
-
       setDuration(moment.duration(ms * -1));
     }, 1000);
     return () => clearInterval(timer);
@@ -51,7 +51,7 @@ export default () => {
 
       console.log('block time:', moment(time * 1000).format('YYYY.MM.DD HH:mm:ss'));
 
-      // setBlockTimestamp(time * 1000);
+      setBlockTimestamp(time * 1000);
     } catch (error) {}
   };
 
@@ -133,6 +133,8 @@ export default () => {
           Get Hashrate
         </Button>
       </BuyModal>
+
+      {account && <p>current block timestamp: {dayjs(blockTimestamp).format('YYYY-MM-DD HH:mm:ss')}</p>}
     </div>
   );
 };

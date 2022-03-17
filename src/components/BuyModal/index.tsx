@@ -5,10 +5,12 @@ import { useEthers } from '@usedapp/core';
 import { utils, BigNumber } from 'ethers';
 import useOwnerNFTs from '@/hooks/useOwnerNFTs';
 import hashrateABI from '@/abis/project.json';
+import erc20ABI from '@/abis/erc20.json';
 import useProject, { ProjectInfo } from '@/hooks/useProject';
 
 import styles from './index.less';
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
+const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -24,6 +26,7 @@ const BuyPane: FC<{ project: ProjectInfo; bindToken?: boolean; onOk?: () => void
   const { nfts, loading: loadingNFTs } = useOwnerNFTs(account);
 
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
+  const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
 
   useEffect(() => {
     if (project?.price) {
@@ -37,9 +40,12 @@ const BuyPane: FC<{ project: ProjectInfo; bindToken?: boolean; onOk?: () => void
     const [contract, tokenId] = token.split('_');
 
     try {
-      if (!hashrateContract) return;
+      if (!hashrateContract || !paymentTokenContract) return;
 
       setLoading(true);
+
+      const approveTx = await paymentTokenContract.approve(HASHRATE_CONTRACT_ADDRESS, utils.parseEther(form.getFieldValue('amount')));
+      await approveTx.wait();
 
       const tx = await hashrateContract.bind(contract, tokenId, volume);
       await tx.wait();
@@ -59,7 +65,8 @@ const BuyPane: FC<{ project: ProjectInfo; bindToken?: boolean; onOk?: () => void
     const price = project?.price;
 
     if (price) {
-      const amount = price.mul(BigNumber.from(value));
+      const amount = price.mul(BigNumber.from(value || '0'));
+      console.log('amount:', amount);
 
       form.setFieldsValue({
         volume: value,

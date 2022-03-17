@@ -21,9 +21,9 @@ export default () => {
   const { address } = useParams<{ address: string }>();
 
   const { account } = useEthers();
-  const ownerNFTs = useOwnerNFTs(account);
+  const { nfts } = useOwnerNFTs(account);
 
-  console.log('ownerNFTs:', ownerNFTs);
+  console.log('nfts:', nfts);
 
   const nftContract = useContract(NFT_CONTRACT_ADDRESS, NFTABI);
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
@@ -190,7 +190,7 @@ export default () => {
                 form.setFieldsValue({ tokenId: val });
               }}
             >
-              {ownerNFTs.map((nft) => (
+              {nfts.map((nft) => (
                 <Option key={nft.image} value={nft.tokenId}>
                   <img src={nft.image} alt="" style={{ width: '25px', height: '25px' }} />
                   <span>{nft.name}</span>
