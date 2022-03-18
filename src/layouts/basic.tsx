@@ -9,8 +9,10 @@ import styles from './basic.less';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
 import AddNetwork from '@/components/AddNetwork';
+import Header from './header';
+import Footer from './footer';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 
@@ -59,7 +61,7 @@ const BasicLayout: React.FC = ({ children }) => {
 
   return (
     <Layout className={styles.layout}>
-      <Header className={styles.header}>
+      {/* <Header className={styles.header}>
         <NavLink to="/">
           <span className={styles.logo}>Launchpad</span>
         </NavLink>
@@ -102,13 +104,12 @@ const BasicLayout: React.FC = ({ children }) => {
             </Button>
           </span>
         )}
-      </Header>
+      </Header> */}
+
+      <Header></Header>
 
       <Content className={styles.content}>{children}</Content>
-      <div className={styles.footer}>
-        <span>v1.0.0</span>
-        <AddNetwork />
-      </div>
+      <Footer></Footer>
     </Layout>
   );
 };

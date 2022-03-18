@@ -1,3 +1,10 @@
+@font-face {
+  font-style: normal;
+  font-family: 'Harmony_Regular';
+  /*引入HarmonyOS_Sans_SC，目录别搞错*/
+  src: url('/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+}
+
 :root {
   --primary-color: rgb(120, 120, 166);
   --secondary-color: rgb(149, 151, 193);
@@ -8,6 +15,7 @@
 
 body {
   color: #999999;
+  font-family: 'Harmony_Regular', sans-serif;
 }
 
 .ant-card-head {

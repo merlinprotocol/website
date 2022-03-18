@@ -58,7 +58,7 @@ export default defineConfig({
       path: '/',
       component: '@/layouts/basic',
       routes: [
-        { path: '/', redirect: '/projects' },
+        { path: '/', component: '@/pages/home' },
         { path: '/projects', component: '@/pages/projects' },
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },
