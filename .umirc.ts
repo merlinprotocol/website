@@ -5,6 +5,12 @@ export default defineConfig({
     type: 'none',
   },
 
+  metas: [
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no',
+    },
+  ],
   proxy: {
     '/api/': {
       target: 'http://8.210.141.80:3000',

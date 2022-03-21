@@ -11,12 +11,18 @@ export default () => {
   return (
     <div className={styles.home}>
       <Banner></Banner>
-      <Application></Application>
-      <Product></Product>
-      <Yield></Yield>
-      <Technical></Technical>
-      <Team></Team>
-      <Cooperation></Cooperation>
+
+      <div className={styles.bg1}>
+        <Application></Application>
+        <Product></Product>
+        <Yield></Yield>
+      </div>
+
+      <div className={styles.bg2}>
+        <Technical></Technical>
+        <Team></Team>
+        <Cooperation></Cooperation>
+      </div>
     </div>
   );
 };
