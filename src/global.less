@@ -1,8 +1,18 @@
 @font-face {
   font-style: normal;
-  font-family: 'Harmony_Regular';
-  /*引入HarmonyOS_Sans_SC，目录别搞错*/
+  font-family: 'HarmonyOS_Sans';
   src: url('/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'HarmonyOS_Sans';
+  src: url('/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Light.ttf') format('truetype');
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'HarmonyOS_Sans';
+  src: url('/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.ttf') format('truetype');
+  font-weight: 700;
 }
 
 :root {
@@ -11,11 +21,14 @@
 
   --primary-bg: rgb(33, 35, 50);
   --secondary-bg: rgb(212, 212, 211);
+
+  --lg-1: linear-gradient(135deg, #e9c68e, #d45b9c, #548dcb);
+  --lg-2: linear-gradient(315deg, #e9c68e, #d45b9c, #548dcb);
 }
 
 body {
   color: #999999;
-  font-family: 'Harmony_Regular', sans-serif;
+  font-family: 'HarmonyOS_Sans', sans-serif;
 }
 
 .ant-card-head {

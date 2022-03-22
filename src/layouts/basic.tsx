@@ -9,8 +9,7 @@ import styles from './basic.less';
 import erc20ABI from '@/abis/erc20.json';
 import { useContract } from '@/hooks/useContract';
 import AddNetwork from '@/components/AddNetwork';
-import Header from './header';
-import Footer from './footer';
+// import Header from './header';
 
 const { Content } = Layout;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
@@ -106,10 +105,9 @@ const BasicLayout: React.FC = ({ children }) => {
         )}
       </Header> */}
 
-      <Header></Header>
+      {/* <Header></Header> */}
 
       <Content className={styles.content}>{children}</Content>
-      <Footer></Footer>
     </Layout>
   );
 };
