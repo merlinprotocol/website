@@ -1,0 +1,77 @@
+@import '~@/mixin.less';
+
+.item {
+  width: 638px;
+  height: 250px;
+  color: #fff;
+  background-size: cover;
+
+  padding-left: 30px;
+  padding-right: 48px;
+  padding-top: 20px;
+
+  &:nth-child(1),
+  &:nth-child(2) {
+    background-image: url(~@/assets/item-bg-1.png);
+  }
+
+  &:nth-child(3),
+  &:nth-child(4) {
+    background-image: url(~@/assets/item-bg-2.png);
+  }
+
+  &:nth-child(5),
+  &:nth-child(6) {
+    background-image: url(~@/assets/item-bg-3.png);
+  }
+}
+
+.top {
+  img {
+    width: 120px;
+  }
+
+  .title {
+    display: inline-block;
+    width: 166px;
+
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.desc {
+  font-size: 18px;
+  font-weight: bold;
+  transform: translateY(-10px);
+}
+
+.data {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .dataItem {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label {
+    font-size: 18px;
+  }
+  .value {
+    font-size: 32px;
+
+    .lg-font;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  column-gap: 66px;
+  row-gap: 43px;
+  padding-bottom: 22px;
+}

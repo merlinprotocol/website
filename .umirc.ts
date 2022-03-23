@@ -66,6 +66,7 @@ export default defineConfig({
       routes: [
         { path: '/', component: '@/pages/home' },
         { path: '/launchpad', component: '@/pages/launchpad' },
+        { path: '/launchpad-list', component: '@/pages/launchpad-list' },
         { path: '/projects', component: '@/pages/projects' },
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },
