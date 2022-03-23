@@ -13,7 +13,7 @@ export default () => {
         <Link to="/" className={classnames(styles.menu, styles.menuHome)}>
           HOME
         </Link>
-        <Link to="/" className={classnames(styles.menu, styles.menuDapp)}>
+        <Link to="/launchpad" className={classnames(styles.menu, styles.menuDapp)}>
           DAPP
         </Link>
         <Link to="/" className={classnames(styles.menu, styles.menuDocs)}>

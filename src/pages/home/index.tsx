@@ -1,3 +1,5 @@
+import Header from '@/layouts/header';
+import Footer from '@/layouts/footer';
 import Banner from './Banner';
 import Application from './Application';
 import Product from './Product';
@@ -10,18 +12,22 @@ import styles from './index.less';
 export default () => {
   return (
     <div className={styles.home}>
-      <Banner></Banner>
+      <div className={styles.wrapBanner}>
+        <Header></Header>
+        <Banner></Banner>
+      </div>
 
       <div className={styles.bg1}>
         <Application></Application>
         <Product></Product>
         <Yield></Yield>
+        <Technical></Technical>
       </div>
 
       <div className={styles.bg2}>
-        <Technical></Technical>
         <Team></Team>
         <Cooperation></Cooperation>
+        <Footer></Footer>
       </div>
     </div>
   );
