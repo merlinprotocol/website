@@ -26,7 +26,7 @@ export default () => {
 
       <div className={styles.bg2}>
         <Team></Team>
-        <Cooperation></Cooperation>
+        {/* <Cooperation></Cooperation> */}
         <Footer></Footer>
       </div>
     </div>

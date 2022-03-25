@@ -59,7 +59,7 @@ const BasicLayout: React.FC = ({ children }) => {
   }, [account, paymentTokenContract]);
 
   return (
-    <Layout className={styles.layout}>
+    <div className={styles.layout}>
       {/* <Header className={styles.header}>
         <NavLink to="/">
           <span className={styles.logo}>Launchpad</span>
@@ -107,8 +107,8 @@ const BasicLayout: React.FC = ({ children }) => {
 
       {/* <Header></Header> */}
 
-      <Content className={styles.content}>{children}</Content>
-    </Layout>
+      <div className={styles.content}>{children}</div>
+    </div>
   );
 };
 

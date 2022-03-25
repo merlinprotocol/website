@@ -42,16 +42,38 @@
   .menu {
     background-size: 16px auto;
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: center;
+    background-size: contain;
 
     padding-left: 20px;
     color: #fff;
     font-size: 16px;
     font-weight: 500;
     margin-right: 45px;
+
+    color: transparent;
   }
   .menuHome {
     background-image: url(~@/assets/home.png);
+
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/home-active.png);
+    }
+  }
+  .menuDapp {
+    background-image: url(~@/assets/dapp.png);
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/dapp-active.png);
+    }
+  }
+  .menuDocs {
+    background-image: url(~@/assets/docs.png);
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/docs-active.png);
+    }
   }
 
   .account {

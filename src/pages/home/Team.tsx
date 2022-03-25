@@ -4,7 +4,7 @@ import ceoava from '@/assets/ceo-ava.png';
 import cto from '@/assets/cto.png';
 import ctoava from '@/assets/cto-ava.png';
 import cmo from '@/assets/cmo.png';
-import cmoava from '@/assets/cto-ava.png';
+import cmoava from '@/assets/cmo-ava.jpeg';
 import cfa2 from '@/assets/cfa2.png';
 import cfa2ava from '@/assets/cfa2-ava.png';
 import cfa from '@/assets/cfa.png';

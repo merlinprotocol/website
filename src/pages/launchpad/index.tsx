@@ -1,15 +1,15 @@
 import Header from '@/layouts/header';
 import Footer from '@/layouts/footer';
-import Info from './Info';
-import History from './History';
+import Banner from './Banner';
+import List from './List';
 import styles from './index.less';
 
 export default () => {
   return (
-    <div className={styles.launchpad}>
+    <div className={styles.launchpadList}>
       <Header></Header>
-      <Info></Info>
-      <History></History>
+      <Banner></Banner>
+      <List></List>
       <Footer></Footer>
     </div>
   );

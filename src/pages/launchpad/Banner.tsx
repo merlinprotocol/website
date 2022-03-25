@@ -1,3 +1,4 @@
+import { Link } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import styles from './Banner.less';
 
@@ -17,8 +18,10 @@ export default () => {
         </div>
 
         <div className={styles.right}>
-          <RightOutlined />
-          More
+          <Link to="/more" style={{ color: '#fff' }}>
+            <RightOutlined />
+            More
+          </Link>
         </div>
       </div>
 
