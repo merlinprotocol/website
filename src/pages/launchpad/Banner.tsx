@@ -1,5 +1,6 @@
 import { Link } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
+import BuyModal from '@/components/BuyModal2';
 import styles from './Banner.less';
 
 export default () => {
@@ -64,9 +65,11 @@ export default () => {
       </div>
 
       {/* Buy */}
-      <div className={styles.buy}>
-        <span className={styles.button}>获取算力</span>
-      </div>
+      <BuyModal>
+        <div className={styles.buy}>
+          <span className={styles.button}>获取算力</span>
+        </div>
+      </BuyModal>
     </div>
   );
 };
