@@ -11,6 +11,7 @@ export default () => {
 
   const deltaY = useRef(0);
   const hiddenRef = useRef(false);
+  const [ontop, setOntop] = useState(true);
 
   useEffect(() => {
     if (mouseWheel > deltaY.current) {
@@ -21,6 +22,12 @@ export default () => {
       if (hidden) {
         setHidden(false);
       }
+    }
+
+    if (window.scrollY === 0) {
+      !ontop && setOntop(true);
+    } else {
+      ontop && setOntop(false);
     }
 
     deltaY.current = mouseWheel;
@@ -50,13 +57,14 @@ export default () => {
     <div
       className={classnames(styles.header, {
         [styles.hidden]: hidden,
+        [styles.ontop]: ontop,
       })}
     >
       <NavLink to="/" className={styles.logoLink}>
-        Merlin Protocal
+        Merlin Protocol
       </NavLink>
 
-      <div className={styles.menus}>
+      {/* <div className={styles.menus}>
         <NavLink to="/" className={classnames(styles.menu, styles.menuHome)} exact activeClassName={styles.active}>
           Home
         </NavLink>
@@ -68,7 +76,7 @@ export default () => {
         </NavLink>
       </div>
 
-      <div className={styles.account}>0x123...1234</div>
+      <div className={styles.account}>0x123...1234</div> */}
     </div>
   );
 };

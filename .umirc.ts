@@ -1,6 +1,10 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  analytics: {
+    ga: 'G-CZFW2SDT2D',
+  },
+
   nodeModulesTransform: {
     type: 'none',
   },
