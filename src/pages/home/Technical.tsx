@@ -1,4 +1,5 @@
 import technical from '@/assets/technical.png';
+import classnames from 'classnames';
 import styles from './Technical.less';
 
 export default () => {
@@ -23,7 +24,7 @@ export default () => {
         </div>
 
         <div className={styles.title}>Multichain Supporting</div>
-        <div className={styles.colorBlock}>
+        <div className={classnames(styles.colorBlock, styles.colorBlock2)}>
           Mercury Protocol was designed for supporting multi-chain. The DApp applications will first be deployed on the Ethereum network, with supporting for
           BSC, Avalanche, Solana, Matic, Improving the liquidity of the hash pawer NFT by multi-chain and multi-market.
         </div>

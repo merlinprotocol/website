@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { NavLink } from 'umi';
 import { Layout, Button, ConfigProvider } from 'antd';
 import { useEthers } from '@usedapp/core';
@@ -43,9 +43,8 @@ const customizeRenderEmpty = () => (
 );
 
 const BasicLayout: React.FC = ({ children }) => {
-  const { activateBrowserWallet, account, chainId } = useEthers();
+  const { account } = useEthers();
   const [tokenBalance, setTokenBalance] = useState<string>();
-
   const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
 
   useEffect(() => {
@@ -58,55 +57,11 @@ const BasicLayout: React.FC = ({ children }) => {
     })();
   }, [account, paymentTokenContract]);
 
+  useEffect(() => {
+    console.log('0.1.0');
+  }, []);
   return (
     <div className={styles.layout}>
-      {/* <Header className={styles.header}>
-        <NavLink to="/">
-          <span className={styles.logo}>Launchpad</span>
-        </NavLink>
-
-        <span className={styles.menus}>
-          <NavLink to="/projects" activeClassName={styles.active}>
-            Projects
-          </NavLink>
-          <NavLink to={`/bind/${HASHRATE_CONTRACT_ADDRESS}`} activeClassName={styles.active}>
-            Bind
-          </NavLink>
-          <NavLink to="/settler" activeClassName={styles.active}>
-            Settler
-          </NavLink>
-          <NavLink to={`/history/${HASHRATE_CONTRACT_ADDRESS}`} activeClassName={styles.active}>
-            History
-          </NavLink>
-          <NavLink to="/calendar" activeClassName={styles.active}>
-            Calendar
-          </NavLink>
-        </span>
-
-        {account ? (
-          <span className={styles.wrapAccount}>
-            <span>chainId: {chainId}</span>
-            <span>Account: {shortAddress(account)}</span>
-            <span>Token Balance: {tokenBalance}</span>
-          </span>
-        ) : (
-          <span className={styles.wrapAccount}>
-            <Button
-              type="link"
-              className={styles.connectBtn}
-              onClick={() => {
-                console.log('activateBrowserWallet');
-                activateBrowserWallet();
-              }}
-            >
-              Connect Wallet
-            </Button>
-          </span>
-        )}
-      </Header> */}
-
-      {/* <Header></Header> */}
-
       <div className={styles.content}>{children}</div>
     </div>
   );

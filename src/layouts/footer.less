@@ -10,17 +10,42 @@
 
   background: linear-gradient(to right, #e9c68e, #d45b9c, #548dcb);
 
-  // background: url(~@/assets/bg-color.png) no-repeat center;
-  // background-size: cover;
-
   .wrapImage {
     flex: 0 0 42px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+  }
 
-    img {
-      max-width: 100%;
+  .telegram {
+    background: url(~@/assets/telegram.png) no-repeat center/contain;
+    &:hover {
+      background: url(~@/assets/telegram-2.png) no-repeat center/contain;
+    }
+  }
+  .email {
+    background: url(~@/assets/email.png) no-repeat center/contain;
+    &:hover {
+      background: url(~@/assets/email-2.png) no-repeat center/contain;
+    }
+  }
+  .twitter {
+    background: url(~@/assets/twitter.png) no-repeat center/contain;
+    &:hover {
+      background: url(~@/assets/twitter-2.png) no-repeat center/contain;
+    }
+  }
+  .discord {
+    background: url(~@/assets/discord.png) no-repeat center/contain;
+    &:hover {
+      background: url(~@/assets/discord-2.png) no-repeat center/contain;
+    }
+  }
+  .github {
+    background: url(~@/assets/github.png) no-repeat center/contain;
+    &:hover {
+      background: url(~@/assets/github-2.png) no-repeat center/contain;
     }
   }
 }

@@ -7,6 +7,7 @@ import Yield from './Yield';
 import Technical from './Technical';
 import Team from './Team';
 import Cooperation from './Cooperation';
+import Roadmap from './Roadmap';
 import styles from './index.less';
 
 export default () => {
@@ -22,6 +23,7 @@ export default () => {
         <Product></Product>
         <Yield></Yield>
         <Technical></Technical>
+        <Roadmap></Roadmap>
       </div>
 
       <div className={styles.bg2}>
