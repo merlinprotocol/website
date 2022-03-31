@@ -12,12 +12,12 @@ export default () => {
 
         <div className={styles.features}>
           <div className={classnames(styles.feature, styles.featureLtv)}>
-            Higher LTV ratio, Mercury can provide an imperial LTV ratio of 50-75%, much higher than common loan
+            Higher LTV ratio, Merlin can provide an imperial LTV ratio of 50-75%, much higher than common loan
           </div>
           <div className={classnames(styles.feature, styles.featureCost)}>NO extra capital cost, no need to pay interest</div>
           <div className={classnames(styles.feature, styles.featureLock)}>Lock mining income early, avoid BTC volatility</div>
           <div className={classnames(styles.feature, styles.featurePlatform)}>
-            Standardized issuing platform can increase discount by heterogeneity and more convenience for additional issuing
+            Standardized issuing platform can alleviate discount by heterogeneity and more convenience for additional issuing
           </div>
           <div className={classnames(styles.feature, styles.featureMarket)}>
             The secondary market provided by the platform will increase liquidity premium, and chances for AMM, derivatives market.

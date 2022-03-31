@@ -4,11 +4,11 @@ import styles from './footer.less';
 export default () => {
   return (
     <div className={styles.footer}>
-      <div className={classnames(styles.wrapImage, styles.telegram)}>{/* telegram */}</div>
-      <div className={classnames(styles.wrapImage, styles.email)}></div>
-      <div className={classnames(styles.wrapImage, styles.twitter)}></div>
-      <div className={classnames(styles.wrapImage, styles.discord)}></div>
-      <div className={classnames(styles.wrapImage, styles.github)}></div>
+      {/* <a href="" target="_blank" className={classnames(styles.wrapImage, styles.telegram)}></a> */}
+      <a href="mailto:business@merlinprotocol.org" target="_blank" className={classnames(styles.wrapImage, styles.email)}></a>
+      <a href="https://twitter.com/ProtocolMerlin" target="_blank" className={classnames(styles.wrapImage, styles.twitter)}></a>
+      <a href="https://discord.gg/VRSCTayjwR" target="_blank" className={classnames(styles.wrapImage, styles.discord)}></a>
+      <a href="https://github.com/merlinprotocol" target="_blank" className={classnames(styles.wrapImage, styles.github)}></a>
     </div>
   );
 };
