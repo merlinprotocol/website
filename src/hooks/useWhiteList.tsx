@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
-const APIURL = 'https://api.thegraph.com/subgraphs/name/merlinprotocoldev/launchpad';
+// const APIURL = 'https://api.thegraph.com/subgraphs/name/merlinprotocoldev/launchpad';
+const APIURL = 'http://8.210.141.80:8000/subgraphs/name/davekaj/launchpad/graphql';
 
 const tokensQuery = `
   query MyQuery {
@@ -21,7 +22,7 @@ export default () => {
 
   useEffect(() => {
     // TODO
-    // init();
+    init();
   }, []);
 
   const init = async () => {

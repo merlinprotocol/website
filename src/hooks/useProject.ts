@@ -5,7 +5,6 @@ import { useContract } from '@/hooks/useContract';
 import hashrateABI from '@/abis/project.json';
 
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
-console.log('HASHRATE_CONTRACT_ADDRESS:', HASHRATE_CONTRACT_ADDRESS);
 
 enum Stage {
   None,
@@ -16,6 +15,7 @@ enum Stage {
 }
 
 export interface ProjectInfo {
+  contract: string;
   supply: BigNumber;
   price: BigNumber;
   sold: BigNumber;
@@ -38,14 +38,11 @@ export default () => {
   const hashrateContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
 
   useEffect(() => {
-    console.log('init');
     init();
   }, [hashrateContract]);
 
   const init = async () => {
     if (!hashrateContract) return;
-
-    console.log('hashrateContract', hashrateContract);
 
     try {
       const supply = await hashrateContract.getSupply();
@@ -64,22 +61,23 @@ export default () => {
 
       const startTimeMoment = moment(startTime.mul('1000').toNumber());
 
-      console.log('project: ', {
-        supply,
-        price,
-        sold,
-        collectionPeriodDuration,
-        observationPeriodDuration,
-        contractDuraction,
-        initialPaymentRatio,
-        currentStage,
-        deliveryStart: moment(deliveryStart * 1000),
-        deliveryEnd: moment(deliveryEnd * 1000),
-        startTime: startTimeMoment,
-        raiseStart: startTimeMoment,
-        raiseEnd: startTimeMoment.clone().add(collectionPeriodDuration, 'seconds'),
-      });
+      // console.log('project: ', {
+      //   supply,
+      //   price,
+      //   sold,
+      //   collectionPeriodDuration,
+      //   observationPeriodDuration,
+      //   contractDuraction,
+      //   initialPaymentRatio,
+      //   currentStage,
+      //   deliveryStart: moment(deliveryStart * 1000),
+      //   deliveryEnd: moment(deliveryEnd * 1000),
+      //   startTime: startTimeMoment,
+      //   raiseStart: startTimeMoment,
+      //   raiseEnd: startTimeMoment.clone().add(collectionPeriodDuration, 'seconds'),
+      // });
       setProject({
+        contract: HASHRATE_CONTRACT_ADDRESS,
         supply,
         price,
         sold,

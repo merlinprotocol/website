@@ -83,9 +83,11 @@ const Item = ({ data }: { data: any }) => {
 export default () => {
   return (
     <div className={styles.list}>
-      {list.map((data: any, index) => (
-        <Item key={index} data={data}></Item>
-      ))}
+      <div className={styles.content}>
+        {list.map((data: any, index) => (
+          <Item key={index} data={data}></Item>
+        ))}
+      </div>
     </div>
   );
 };
