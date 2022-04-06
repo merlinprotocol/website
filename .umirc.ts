@@ -1,6 +1,8 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  favicon: 'favicon.png',
+
   analytics: {
     ga: 'G-CZFW2SDT2D',
   },
