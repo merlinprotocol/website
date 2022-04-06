@@ -19,9 +19,6 @@ export default () => {
   // 倒计时
   useEffect(() => {
     if (!project?.raiseEnd) return;
-    console.log('setInterval');
-    console.log('start time:', project.startTime.format('YYYY-MM-DD HH:mm:ss'));
-    console.log('raise end:', project.raiseEnd.format('YYYY-MM-DD HH:mm:ss'));
     const timer = setInterval(() => {
       const ms = moment().diff(project.raiseEnd);
       setDuration(moment.duration(ms * -1));
@@ -35,10 +32,6 @@ export default () => {
 
   useEffect(() => {
     if (project?.sold) {
-      console.log('project.sold:', project.sold.toNumber());
-      console.log('project.supply:', project.supply.toNumber());
-      console.log('project.process:', project.sold.div(project.supply.toNumber()).toString());
-
       setProcess(project.sold.toNumber() / project.supply.toNumber());
     }
   }, [project?.sold]);
@@ -48,8 +41,6 @@ export default () => {
       const blockNumber = await library?.send('eth_blockNumber', []);
       const block = await library?.send('eth_getBlockByNumber', [blockNumber, false]);
       const time = parseInt(block.timestamp);
-
-      console.log('block time:', moment(time * 1000).format('YYYY.MM.DD HH:mm:ss'));
 
       setBlockTimestamp(time * 1000);
     } catch (error) {}

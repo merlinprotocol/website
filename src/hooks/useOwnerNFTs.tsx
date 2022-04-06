@@ -24,13 +24,8 @@ export default (account: string | null | undefined) => {
       try {
         const nftAddress = whiteList[i];
         const erc721Contract = getContract(nftAddress, erc721ABI);
-        console.log('erc721Contract:', erc721Contract);
 
         const balance = await erc721Contract.balanceOf(account);
-
-        console.log('account', account);
-        console.log('nftAddress', nftAddress);
-        console.log('balance', balance);
 
         if (balance === 0) {
           continue;
@@ -55,8 +50,6 @@ export default (account: string | null | undefined) => {
             continue;
           }
         }
-
-        console.log('owner nfts:', tokens);
       } catch (error) {
         console.error(error);
         continue;

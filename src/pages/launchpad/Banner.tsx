@@ -9,7 +9,7 @@ import moment from 'moment';
 
 const SECONDS_PER_WEEK = 7 * 24 * 3600;
 
-export default ({ project }: { project: ProjectInfo | undefined }) => {
+export default ({ project, metadata }: { project: ProjectInfo | undefined; metadata?: any }) => {
   const [raising, setRaising] = useState(false); // 募集中
   const [timeLeft, setTimeLeft] = useState<moment.Duration>(); // 募集期剩余时间
   const [soldPercent, setSoldPercent] = useState(0);
@@ -48,11 +48,11 @@ export default ({ project }: { project: ProjectInfo | undefined }) => {
         <div className={styles.top}>
           <div className={styles.left}>
             <span className={styles.wrapImg}>
-              <img src="" alt="" />
+              <img src={metadata?.logo} alt="" />
             </span>
             <span className={styles.wrapText}>
-              <span>BTC Mining Project 2022</span>
-              <span>ETH Pool Ends In(ended)</span>
+              <span>{metadata?.name}</span>
+              {/* <span>ETH Pool Ends In(ended)</span> */}
             </span>
           </div>
 
@@ -66,7 +66,7 @@ export default ({ project }: { project: ProjectInfo | undefined }) => {
 
         {/* Message && Buy */}
         <div className={styles.messageAndBuy}>
-          <span className={styles.text}>Native IDO tokens of the IDO Launchpad platform</span>
+          <span className={styles.text}>{metadata?.description}</span>
         </div>
 
         {/* Data */}

@@ -73,6 +73,8 @@ export default defineConfig({
         { path: '/', component: '@/pages/home', title: 'Merlin protocol' },
         { path: '/launchpad/:contract', component: '@/pages/launchpadHistory', title: 'Launchpad' },
         { path: '/launchpad', component: '@/pages/launchpad', title: 'Launchpad' },
+        { path: '/mybuyhistory', component: '@/pages/myBuyHistory', title: 'Merlin protocol' },
+
         { path: '/projects', component: '@/pages/projects' },
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },

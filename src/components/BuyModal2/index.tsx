@@ -71,7 +71,6 @@ const BuyModal: FC<{ project: ProjectInfo | undefined; onOk?: () => void }> = ({
     try {
       await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, account, utils.parseUnits(amount, 'ether').toString());
 
-      console.log('nft:', selectedNFT);
       let tx = null;
       if (tab === BUY) {
         tx = await vendingContract?.buy(HASHRATE_CONTRACT_ADDRESS, volumn);

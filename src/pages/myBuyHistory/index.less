@@ -1,0 +1,48 @@
+.myBuyHistory {
+  background: url(~@/assets/my-buy-bg.png) no-repeat center / cover;
+}
+.content {
+  padding-top: 215px;
+  min-height: calc(100vh - 70px);
+  width: 1042px;
+  margin: 0 auto;
+}
+
+.myBuyItem {
+  width: 1042px;
+  height: 283px;
+  background: #fff url(~@/assets/my-buy-item-border.png) no-repeat center;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding-right: 57px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 625px;
+
+  font-size: 18px;
+  color: #000;
+}
+
+.claimBtn {
+  display: inline-block;
+  width: 70px;
+  height: 30px;
+  text-align: center;
+  margin-left: auto;
+
+  font-size: 18px;
+  color: #fff;
+  background: var(--lg-1);
+  border-radius: 4px;
+
+  &:hover {
+    color: #fff;
+  }
+}

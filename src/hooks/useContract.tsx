@@ -17,12 +17,14 @@ export const getProviderOrSigner = (
   return library || ethers.getDefaultProvider(network);
 };
 
-export const useContract = (address: string, abi: ethers.ContractInterface) => {
+export const useContract = (address: string | undefined, abi: ethers.ContractInterface) => {
   const { chainId, library, account } = useEthers();
 
   const provider = getProviderOrSigner(library, account);
 
   return React.useMemo(() => {
+    if (!address) return null;
+
     try {
       return new ethers.Contract(address, abi, provider);
     } catch (error) {
