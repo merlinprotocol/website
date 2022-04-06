@@ -64,19 +64,19 @@ export default () => {
         Merlin Protocol
       </NavLink>
 
-      {/* <div className={styles.menus}>
-        <NavLink to="/" className={classnames(styles.menu, styles.menuHome)} exact activeClassName={styles.active}>
+      <div className={styles.menus}>
+        {/* <NavLink to="/" className={classnames(styles.menu, styles.menuHome)} exact activeClassName={styles.active}>
           Home
         </NavLink>
         <NavLink to="/launchpad" className={classnames(styles.menu, styles.menuDapp)} exact activeClassName={styles.active}>
           DAPP
-        </NavLink>
-        <NavLink to="/docs" className={classnames(styles.menu, styles.menuDocs)} exact activeClassName={styles.active}>
+        </NavLink> */}
+        <a href="https://eason-3.gitbook.io/mercury/protocol/merlin-overview" target="_blank" className={classnames(styles.menu, styles.menuDocs)}>
           DOCS
-        </NavLink>
+        </a>
       </div>
 
-      <div className={styles.account}>0x123...1234</div> */}
+      {/* <div className={styles.account}>0x123...1234</div> */}
     </div>
   );
 };

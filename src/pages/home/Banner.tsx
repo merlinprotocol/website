@@ -10,8 +10,9 @@ export default () => {
         <img src={sologn2} alt="sologn" className={styles.sologn2} />
 
         <p className={styles.text}>
-          Merlin Protocol is a Defi infrastructure protocol for hash power and its derivatives. This protocol digitizes real-world cryptocurrency hash power
-          assets and introduces them into the Defi ecosystem through a hash power oracle and a decentralized settlement system.
+          Merlin Protocol is a DeFi infrastructure protocol that provides users the opportunity to gain direct exposure to crypto-mining hash power. Merlin
+          digitizes real-world cryptocurrency hash power assets and introduces them into the DeFi ecosystem through a hash power oracle and a decentralized
+          settlement system.
         </p>
       </div>
     </div>

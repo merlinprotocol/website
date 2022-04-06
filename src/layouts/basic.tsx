@@ -58,7 +58,7 @@ const BasicLayout: React.FC = ({ children }) => {
   }, [account, paymentTokenContract]);
 
   useEffect(() => {
-    console.log('0.1.0');
+    console.log('0.1.2');
   }, []);
   return (
     <div className={styles.layout}>

@@ -7,9 +7,10 @@ export default () => {
       <div className={styles.content}>
         <img src={application} className={styles.applicationTitle} />
         <p className={styles.text}>
-          Hash power holders(listed companies usually) standardize and tokenize their hash power and put it on-chain. Users buy these hash power and mint NFT
-          representing the hash power, holding the earning rights of mining. Hash power holders can get up to 50% of the (depending on the asset quality and
-          risk indicator) to expand the mining field or buy more mining machines. The rest capital will be released depending on the performance.
+          A hash power issuer (a crypto currency mining company of scale) standardizes and tokenizes their hash power into NFTs Users hold the hash power NFT
+          and receive the designated mining income. The issuer can receive up to 50% of the estimated NFT contract value upfront (depending on their issuer
+          quality rating and risk score). The issuer may use the proceeds to expand their existing mining operation. The remaining proceeds will be released
+          depending on the performance over the life of the NFT contract
         </p>
       </div>
     </div>

@@ -11,16 +11,15 @@ export default () => {
         <img src={product} alt="product" className={styles.productText} />
 
         <div className={styles.features}>
-          <div className={classnames(styles.feature, styles.featureLtv)}>
-            Higher LTV ratio, Merlin can provide an imperial LTV ratio of 50-75%, much higher than common loan
-          </div>
-          <div className={classnames(styles.feature, styles.featureCost)}>NO extra capital cost, no need to pay interest</div>
-          <div className={classnames(styles.feature, styles.featureLock)}>Lock mining income early, avoid BTC volatility</div>
+          <div className={classnames(styles.feature, styles.featureLtv)}>Providing higher leverage to issuers by collateralizing future mining earnings</div>
+          <div className={classnames(styles.feature, styles.featureCost)}>No additional capital expenses,No need to pay interest to the purchaser</div>
+          <div className={classnames(styles.feature, styles.featureLock)}>Lock in mining income immediately and reduce market risk (BTC volatility)</div>
           <div className={classnames(styles.feature, styles.featurePlatform)}>
-            Standardized issuing platform can alleviate discount by heterogeneity and more convenience for additional issuing
+            Increasing volume and demand for cryptocurrency mining by creating a standardized NFT that allows for easier access to crypto mining
           </div>
-          <div className={classnames(styles.feature, styles.featureMarket)}>
-            The secondary market provided by the platform will increase liquidity premium, and chances for AMM, derivatives market.
+          <div className={classnames(styles.feature, styles.featureMarket)} style={{ width: '460px' }}>
+            The secondary market and derivatives market provided by the Merlin Platform increases liquidity and allows for Automated Market Making (AMM), which
+            allows users to transact their assets without any intermediary facilitating the exchange
           </div>
         </div>
       </div>
