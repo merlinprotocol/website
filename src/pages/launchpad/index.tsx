@@ -11,7 +11,8 @@ export default () => {
   const { project } = useProject();
   const metadata = useMetadata(project?.contract);
 
-  console.log('metadata:', metadata);
+  console.log('start:', project?.raiseStart.format('YYYY.MM.DD HH:mm'));
+  console.log('end:', project?.raiseEnd.format('YYYY.MM.DD HH:mm'));
 
   return (
     <div className={styles.launchpadList}>

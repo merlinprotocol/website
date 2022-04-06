@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import moment from 'moment';
 import { useContract } from '@/hooks/useContract';
 import hashrateABI from '@/abis/project.json';
@@ -30,6 +30,10 @@ export interface ProjectInfo {
   raiseStart: moment.Moment;
   raiseEnd: moment.Moment;
   currentStage: Stage;
+  initialPayment: string; // usdt
+  deliveryTimes: number;
+  soldAmount: BigNumber | null; // wei
+  depositAccountBalance: number; // usdt
 }
 
 export default () => {
@@ -40,6 +44,50 @@ export default () => {
   useEffect(() => {
     init();
   }, [hashrateContract]);
+
+  // wei
+  const calcSoldAmount = (currentStage: number, price: BigNumber, sold: BigNumber) => {
+    if (currentStage && currentStage > 1) {
+      if (sold && price) {
+        const soldAmount = sold.mul(price);
+
+        return soldAmount;
+      }
+    }
+
+    return null;
+  };
+
+  // USDT
+  const calcInitialPayment = (soldAmount: BigNumber | null, initialPaymentRatio: BigNumber) => {
+    if (soldAmount) {
+      const initialPayment = soldAmount.mul(initialPaymentRatio).div(BigNumber.from('10000'));
+
+      return utils.formatEther(initialPayment);
+    }
+
+    return '';
+  };
+
+  const calcDeliveryTimes = (contractDuraction: BigNumber, collectionPeriodDuration: BigNumber) => {
+    if (contractDuraction && collectionPeriodDuration) {
+      const duration = contractDuraction?.sub(collectionPeriodDuration);
+
+      const times = duration.toNumber() / 3600 / 7 / 24;
+
+      return times;
+    }
+
+    return 0;
+  };
+
+  const calcDepositAccountBalance = (initialPayment: string, soldAmount: BigNumber | null) => {
+    if (!soldAmount) return '';
+
+    const balanceWei = soldAmount.sub(utils.parseEther(initialPayment));
+
+    return utils.formatUnits(balanceWei);
+  };
 
   const init = async () => {
     if (!hashrateContract) return;
@@ -60,6 +108,11 @@ export default () => {
       const deliveryEnd = startTime.add(contractDuraction).toNumber();
 
       const startTimeMoment = moment(startTime.mul('1000').toNumber());
+
+      const soldAmount = calcSoldAmount(currentStage, price, sold); // wei
+      const initialPayment = calcInitialPayment(soldAmount, initialPaymentRatio); // usdt
+      const deliveryTimes = calcDeliveryTimes(contractDuraction, collectionPeriodDuration);
+      const depositAccountBalance = calcDepositAccountBalance(initialPayment, soldAmount);
 
       // console.log('project: ', {
       //   supply,
@@ -91,6 +144,10 @@ export default () => {
         startTime: startTimeMoment,
         raiseStart: startTimeMoment,
         raiseEnd: startTimeMoment.clone().add(collectionPeriodDuration, 'seconds'),
+        initialPayment,
+        deliveryTimes,
+        soldAmount: utils.parseEther(soldAmount?.toString() || '0'),
+        depositAccountBalance,
       });
     } catch (error) {
       console.error(error);

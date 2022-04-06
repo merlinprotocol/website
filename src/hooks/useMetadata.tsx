@@ -4,7 +4,7 @@ import ProjectABI from '@/abis/project.json';
 
 // project metadata
 export default (contract: string | undefined) => {
-  const [metadata, setMetadata] = useState(null);
+  const [metadata, setMetadata] = useState<any>(null);
   const projectContract = useContract(contract, ProjectABI);
 
   useEffect(() => {

@@ -1,12 +1,18 @@
 import { useParams } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import useProject, { ProjectInfo } from '@/hooks/useProject';
+import moment from 'moment';
+import { utils, BigNumber } from 'ethers';
 import classnames from 'classnames';
 import styles from './Info.less';
+import useMetadata from '@/hooks/useMetadata';
 
 export default () => {
   const { contract }: any = useParams();
   const { project } = useProject();
+  const metadata = useMetadata(project?.contract);
+
+  console.log('project:', project);
 
   return (
     <div className={styles.info}>
@@ -14,11 +20,11 @@ export default () => {
       <div className={styles.top}>
         <div className={styles.left}>
           <span className={styles.wrapImg}>
-            <img src="" alt="" />
+            <img src={metadata?.logo} alt="" />
           </span>
           <span className={styles.wrapText}>
-            <span>BTC Mining Project 2022</span>
-            <span>ETH Pool Ends In(ended)</span>
+            <span>{metadata?.name}</span>
+            {/* <span>ETH Pool Ends In(ended)</span> */}
           </span>
         </div>
 
@@ -30,7 +36,9 @@ export default () => {
 
       {/* Message && Buy */}
       <div className={styles.messageAndBuy}>
-        <span className={styles.text}>Native IDO tokens of the IDO Launchpad platform Project:{contract}</span>
+        <span className={styles.text}>
+          {metadata?.description}:{contract}
+        </span>
         <span className={styles.buyBtn}>购买</span>
       </div>
 
@@ -43,12 +51,14 @@ export default () => {
 
         <span className={styles.deliveryTimes}>
           <span className={styles.label}>Delivery times</span>
-          <span className={styles.value}>48Times</span>
+          <span className={styles.value}>{project?.deliveryTimes}Times</span>
         </span>
 
         <span className={styles.deliveryTime}>
           <span className={styles.label}>Delivery time</span>
-          <span className={styles.value}>2022/03/07-2023/03/06</span>
+          <span className={styles.value}>
+            {project?.deliveryStart.format('YYYY/MM/DD')}-{project?.deliveryEnd.format('YYYY/MM/DD')}
+          </span>
         </span>
       </div>
 
@@ -56,15 +66,15 @@ export default () => {
       <div className={styles.someAmount}>
         <span className={styles.item} style={{ marginRight: '170px' }}>
           <span className={styles.label}>Initial payment</span>
-          <span className={styles.value}>2,350,000 USDT</span>
+          <span className={styles.value}>{project?.initialPayment} USDT</span>
         </span>
         <span className={styles.item} style={{ marginRight: '150px' }}>
           <span className={styles.label}>Option Account balance</span>
-          <span className={styles.value}>100,000,000 USDT</span>
+          <span className={styles.value}>unknow USDT</span>
         </span>
         <span className={styles.item}>
           <span className={styles.label}>Deposit account balance</span>
-          <span className={styles.value}>1,000,000 USDT</span>
+          <span className={styles.value}>{project?.depositAccountBalance} USDT</span>
         </span>
       </div>
 
