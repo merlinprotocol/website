@@ -1,11 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { useMouseWheel } from 'react-use';
 import { NavLink } from 'umi';
+import { useEthers } from '@usedapp/core';
+import { shortAddress } from '@/utils';
 
 import classnames from 'classnames';
 import styles from './header.less';
 
 export default () => {
+  const { account, activateBrowserWallet } = useEthers();
+
   const mouseWheel = useMouseWheel();
   const [hidden, setHidden] = useState(false);
 
@@ -65,18 +69,18 @@ export default () => {
       </NavLink>
 
       <div className={styles.menus}>
-        {/* <NavLink to="/" className={classnames(styles.menu, styles.menuHome)} exact activeClassName={styles.active}>
+        <NavLink to="/" className={classnames(styles.menu, styles.menuHome)} exact activeClassName={styles.active}>
           Home
         </NavLink>
         <NavLink to="/launchpad" className={classnames(styles.menu, styles.menuDapp)} exact activeClassName={styles.active}>
           DAPP
-        </NavLink> */}
+        </NavLink>
         <a href="https://eason-3.gitbook.io/mercury/protocol/merlin-overview" target="_blank" className={classnames(styles.menu, styles.menuDocs)}>
           DOCS
         </a>
       </div>
 
-      {/* <div className={styles.account}>0x123...1234</div> */}
+      <div className={styles.account}>{account ? shortAddress(account) : <a onClick={activateBrowserWallet}>Connect</a>}</div>
     </div>
   );
 };

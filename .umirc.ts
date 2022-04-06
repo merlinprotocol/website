@@ -1,6 +1,8 @@
 import { defineConfig } from 'umi';
 
 export default defineConfig({
+  favicon: '/favicon.png',
+
   analytics: {
     ga: 'G-CZFW2SDT2D',
   },
@@ -15,13 +17,13 @@ export default defineConfig({
       content: 'content="width=device-width, initial-scale=1.0, user-scalable=no"',
     },
   ],
-  proxy: {
-    '/api/': {
-      target: 'http://8.210.141.80:3000',
-      changeOrigin: true,
-      secure: false,
-    },
-  },
+  // proxy: {
+  //   '/api/': {
+  //     target: 'http://8.210.141.80:3000',
+  //     changeOrigin: true,
+  //     secure: false,
+  //   },
+  // },
 
   history: { type: 'hash' },
 
@@ -68,15 +70,16 @@ export default defineConfig({
       path: '/',
       component: '@/layouts/basic',
       routes: [
-        { path: '/', component: '@/pages/home' },
-        { path: '/launchpad', component: '@/pages/launchpad' },
-        { path: '/more', component: '@/pages/more' },
+        { path: '/', component: '@/pages/home', title: 'Merlin protocol' },
+        { path: '/launchpad/:contract', component: '@/pages/launchpadHistory', title: 'Launchpad' },
+        { path: '/launchpad', component: '@/pages/launchpad', title: 'Launchpad' },
         { path: '/projects', component: '@/pages/projects' },
         { path: '/bind/:address', component: '@/pages/bind' },
         { path: '/settler', component: '@/pages/settler' },
         { path: '/history/:project', component: '@/pages/history' },
         { path: '/calendar', component: '@/pages/calendar' },
         { path: '/add-network', component: '@/pages/addNetwork' },
+        { path: '*', component: '@/pages/404' },
       ],
     },
   ],
