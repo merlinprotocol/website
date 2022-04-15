@@ -7,7 +7,7 @@ export default () => {
   const timestamp = useBlockTimestamp();
 
   return (
-    <div className={styles.footer}>
+    <div className={classnames(styles.footer, 'footer')}>
       {/* DEV */}
       {!!timestamp && <span style={{ float: 'left', color: '#fff', lineHeight: '70px' }}>{dayjs(timestamp).format('YYYY.MM.DD HH:mm')}</span>}
 

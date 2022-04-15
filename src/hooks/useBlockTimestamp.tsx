@@ -16,7 +16,9 @@ export default () => {
       const time = parseInt(block.timestamp);
 
       setTimestamp(time * 1000);
-    } catch (error) {}
+    } catch (error) {
+      console.log('useBlockTimestamp error: ', error);
+    }
   };
 
   return timestamp;

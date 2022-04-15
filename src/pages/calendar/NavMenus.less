@@ -1,0 +1,95 @@
+.header {
+  height: 70px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-left: 64px;
+  padding-right: 64px;
+
+  .logoLink {
+    display: inline-block;
+    height: 40px;
+    font-size: 32px;
+    color: #fff;
+    padding-left: 100px;
+    vertical-align: bottom;
+
+    flex: 0 0 580px;
+
+    background-image: url(~@/assets/logo.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 80px 40px;
+  }
+
+  .menus {
+    margin-left: auto;
+
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+  }
+
+  .menu {
+    background-size: 16px auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    padding-left: 20px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 45px;
+
+    color: transparent;
+  }
+  .menuHome {
+    background-image: url(~@/assets/home-black.png);
+
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/home-active.png);
+    }
+  }
+  .menuDapp {
+    background-image: url(~@/assets/dapp-black.png);
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/dapp-active.png);
+    }
+  }
+  .menuDocs {
+    background-image: url(~@/assets/docs-black.png);
+    &:hover,
+    &.active {
+      background-image: url(~@/assets/docs-active.png);
+    }
+  }
+
+  .account {
+    background: url(~@/assets/logo-black.svg) no-repeat left 12px center;
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+
+    padding-left: 42px;
+    padding-right: 12px;
+
+    border: 1px solid #000;
+    border-radius: 12px;
+
+    margin-left: 45px;
+  }
+}
+.hidden {
+  top: -70px;
+}
+
+.ontop {
+  background: transparent;
+}

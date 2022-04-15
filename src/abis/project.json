@@ -51,31 +51,31 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user_",
+        "name": "user",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "nft_",
+        "name": "nft",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "tokenId_",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "price_",
+        "name": "price",
         "type": "uint256"
       }
     ],
@@ -88,13 +88,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "old_",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "new_",
+        "name": "to",
         "type": "address"
       }
     ],
@@ -107,13 +107,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "issuer_",
+        "name": "issuer",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -126,19 +126,19 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "issuer_",
+        "name": "issuer",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "idx_",
+        "name": "idx",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -151,19 +151,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "idx_",
+        "name": "idx",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "day_",
+        "name": "day",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -195,13 +195,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "splitter_",
+        "name": "splitter",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -214,13 +214,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "oldPriceOracle_",
+        "name": "oldPriceOracle",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "newPriceOracle_",
+        "name": "newPriceOracle",
         "type": "address"
       }
     ],
@@ -233,19 +233,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "idx_",
+        "name": "idx",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "spliter_",
+        "name": "spliter",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount_",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -473,6 +473,37 @@
   },
   {
     "inputs": [],
+    "name": "getWeekDayAmounts",
+    "outputs": [
+      {
+        "internalType": "uint256[][]",
+        "name": "",
+        "type": "uint256[][]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "initialPaymentAmounts",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenReceived",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "initialAmount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "initialPaymentClaimed",
     "outputs": [
       {
@@ -512,7 +543,7 @@
   },
   {
     "inputs": [],
-    "name": "liquidation",
+    "name": "liquidate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -538,24 +569,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paymentAmounts",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenReceived",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialAmount",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -711,6 +724,30 @@
         "internalType": "contract IERC20",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "weekDayAmounts",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

@@ -66,7 +66,7 @@ export default () => {
       <div className={styles.someAmount}>
         <span className={styles.item} style={{ marginRight: '170px' }}>
           <span className={styles.label}>Initial payment</span>
-          <span className={styles.value}>{project?.initialPayment} USDT</span>
+          <span className={styles.value}>{project?.initialPayment || '-'} USDT</span>
         </span>
         <span className={styles.item} style={{ marginRight: '150px' }}>
           <span className={styles.label}>Option Account balance</span>
@@ -74,7 +74,7 @@ export default () => {
         </span>
         <span className={styles.item}>
           <span className={styles.label}>Deposit account balance</span>
-          <span className={styles.value}>{project?.depositAccountBalance} USDT</span>
+          <span className={styles.value}>{project?.depositAccountBalance || '-'} USDT</span>
         </span>
       </div>
 

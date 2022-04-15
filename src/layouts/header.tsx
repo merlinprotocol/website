@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useMouseWheel } from 'react-use';
-import { NavLink } from 'umi';
+import { Menu, Dropdown } from 'antd';
+import { NavLink, Link } from 'umi';
 import { useEthers } from '@usedapp/core';
 import { shortAddress } from '@/utils';
 
@@ -57,6 +58,17 @@ export default () => {
   //   scrollY.current = window.scrollY;
   // };
 
+  const menu = (
+    <Menu style={{ width: '144px' }}>
+      <Menu.Item>
+        <Link to="/launchpad">我申购的项目</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/calendar">我创建的项目</Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div
       className={classnames(styles.header, {
@@ -80,7 +92,15 @@ export default () => {
         </a>
       </div>
 
-      <div className={styles.account}>{account ? shortAddress(account) : <a onClick={activateBrowserWallet}>Connect</a>}</div>
+      <div className={styles.account}>
+        {account ? (
+          <Dropdown overlay={menu} placement="bottomCenter">
+            <span>{shortAddress(account)}</span>
+          </Dropdown>
+        ) : (
+          <a onClick={activateBrowserWallet}>Connect</a>
+        )}
+      </div>
     </div>
   );
 };

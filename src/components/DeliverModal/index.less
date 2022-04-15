@@ -1,0 +1,85 @@
+.deliverModal {
+  color: #000;
+
+  :global {
+    .ant-modal-body {
+      padding: 0;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  height: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0 12px;
+
+  background: linear-gradient(to right, #e5ca8a, #ac619c, #5186bf);
+}
+
+.wrapCloseIcon {
+  width: 19px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  cursor: pointer;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.body,
+.footer {
+  padding-left: 56px;
+  padding-top: 23px;
+  padding-bottom: 13px;
+}
+
+.body {
+  font-size: 20px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .wrapInput {
+    display: inline-block;
+    border: 1px solid #000;
+    input {
+      width: 48px;
+      border: none;
+      outline: none;
+      height: 30px;
+      line-height: 30px;
+    }
+    .label {
+      display: inline-block;
+      width: 70px;
+      line-height: 30px;
+      height: 30px;
+      background: url(~@/assets/wbtc-bg.png) no-repeat center;
+      background-size: 70px 30px;
+      text-align: center;
+    }
+  }
+
+  .deliverBtn {
+    display: inline-block;
+    margin-left: 59px;
+    width: 70px;
+    height: 30px;
+    background: var(--lg-1);
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+  }
+}

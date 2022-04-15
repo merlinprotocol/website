@@ -1,12 +1,151 @@
 .calendar {
   display: flex;
   flex-direction: row;
+  background: url(~@/assets/calendar-bg.png) no-repeat center / cover;
+  min-height: 100vh;
+  color: #000;
 }
 
 .sidebar {
+  position: relative;
   flex: 0 0 336px;
   background: linear-gradient(to bottom, #e5ca8a, #ac619c, #5186bf);
+
+  padding-top: 25px;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    margin-bottom: 124px;
+
+    img {
+      width: 78px;
+      height: auto;
+    }
+    .text {
+      font-size: 34px;
+      color: #fff;
+      line-height: 1em;
+      transform: translateY(10px);
+    }
+  }
 }
+
+.block {
+  width: 226px;
+  height: 98px;
+  background: url(~@/assets/calendar-block-bg.png) no-repeat center / cover;
+
+  margin: 0 auto 47px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .label {
+    font-size: 14px;
+  }
+  .value {
+    font-size: 24px;
+  }
+}
+
+.processLabel {
+  margin: 65px auto 0;
+  width: 200px;
+}
+.button {
+  display: block;
+  margin: 0 auto 28px;
+  width: 226px;
+  height: 39px;
+  line-height: 39px;
+  text-align: center;
+
+  color: #000;
+  background: url(~@/assets/calendar-button-bg.png) no-repeat center;
+  background-size: cover;
+
+  &:hover {
+    color: #000;
+  }
+}
+
 .content {
   flex: 1;
+  padding-right: 62px;
+  padding-left: 42px;
+
+  .wrapMenus {
+    width: 100%;
+  }
+
+  .extra {
+    a[type='button'] {
+      display: block;
+      width: 166px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      margin-bottom: 11px;
+      color: #000;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+
+    .account {
+      background: linear-gradient(to right, #e5ca8a, #ac619c, #5186bf);
+      color: #fff;
+    }
+    .project {
+      background: #fff;
+      color: #000;
+    }
+  }
+}
+
+// dateCell
+// =========
+.today {
+  background-color: #5186bf;
+}
+
+.wrapCalendar {
+  :global {
+    // .ant-picker-cell-today {
+    //   background: var(--lg-1);
+    // }
+
+    // .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell:hover .ant-picker-calendar-date {
+    //   background: var(--lg-1);
+    // }
+
+    .ant-picker-calendar-date-content {
+      div,
+      ul {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.wrapFooter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  :global {
+    .footer {
+      gap: 0;
+      background: transparent;
+      justify-content: space-around;
+
+      a {
+        flex: 0 0 30px;
+      }
+    }
+  }
 }
