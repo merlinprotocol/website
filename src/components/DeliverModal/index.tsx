@@ -4,30 +4,19 @@ import { ProjectInfo } from '@/hooks/useProject';
 import close from '@/assets/icon-close.png';
 import people from '@/assets/people.png';
 import { utils, BigNumber } from 'ethers';
-import { useContract } from '@/hooks/useContract';
-import vendingABI from '@/abis/vending.json';
-import erc20ABI from '@/abis/erc20.json';
 import { useEthers } from '@usedapp/core';
-import { paymentTokenApprove } from '@/actions/project';
-import { shortAddress } from '@/utils';
-import useOwnerNFTs from '@/hooks/useOwnerNFTs';
-import { handleDeliver } from '@/actions/project';
-import hashrateABI from '@/abis/project.json';
 
 import classnames from 'classnames';
 import styles from './index.less';
-import moment from 'moment';
 
-const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
-const SETTLE_TOKEN_CONTRACT_ADDRESS = process.env.SETTLE_TOKEN_CONTRACT_ADDRESS as string;
-
-const BuyModal: FC<{ project: ProjectInfo | undefined; date: moment.Moment; onOk?: () => void }> = ({ project, date, children, onOk }) => {
+const BuyModal: FC<{ idx: number; handleDeliver: (idx: number, amount: string, account: string) => void; onOk?: () => void }> = ({
+  idx,
+  children,
+  handleDeliver,
+}) => {
   const [visible, setVisible] = useState(false);
   const { account } = useEthers();
-  const [amount, setAmount] = useState<number | string>('');
-
-  const projectContract = useContract(HASHRATE_CONTRACT_ADDRESS, hashrateABI);
-  const deliverTokenContract = useContract(SETTLE_TOKEN_CONTRACT_ADDRESS, erc20ABI);
+  const [amount, setAmount] = useState<string>('');
 
   const onClickButton = () => {
     setVisible(true);
@@ -38,8 +27,9 @@ const BuyModal: FC<{ project: ProjectInfo | undefined; date: moment.Moment; onOk
   };
 
   const doDeliver = async () => {
-    const tx = await handleDeliver(projectContract, project, deliverTokenContract, account, date, amount);
-    console.log('txx:', tx);
+    if (!account) return;
+
+    await handleDeliver(idx, amount, account);
 
     setVisible(false);
   };

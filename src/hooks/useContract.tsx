@@ -14,7 +14,8 @@ export const getProviderOrSigner = (
     // return library.getSigner(account);
   }
 
-  return library || ethers.getDefaultProvider(network);
+  // return library || ethers.getDefaultProvider(network);
+  return ethers.getDefaultProvider(network);
 };
 
 export const useContract = (address: string | undefined, abi: ethers.ContractInterface) => {

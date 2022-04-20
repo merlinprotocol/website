@@ -24,8 +24,8 @@ const config: Config = {
   // readOnlyUrls: {
   //   [Ropsten.chainId]: 'http://localhost:8545',
   // },
-  networks: [Hardhat, Mainnet, Ropsten, BSCTestnet],
-  autoConnect: true,
+  // networks: [Hardhat, Mainnet, Ropsten, BSCTestnet],
+  // autoConnect: true,
   multicallAddresses: {
     [ChainId.Mainnet]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
     [ChainId.BSCTestnet]: '0x0f5d1ef48f12b6f691401bfe88c2037c690a6afe',
