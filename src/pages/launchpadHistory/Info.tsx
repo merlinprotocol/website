@@ -1,18 +1,20 @@
+import { useEffect } from 'react';
 import { useParams } from 'umi';
-import { RightOutlined } from '@ant-design/icons';
-import useProject, { ProjectInfo } from '@/hooks/useProject';
-import moment from 'moment';
-import { utils, BigNumber } from 'ethers';
 import classnames from 'classnames';
 import styles from './Info.less';
-import useMetadata from '@/hooks/useMetadata';
+
+import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 
 export default () => {
   const { contract }: any = useParams();
-  const { project } = useProject();
-  const metadata = useMetadata(project?.contract);
 
-  console.log('project:', project);
+  const metadata = useMetadata();
+  const basicInfo = useBasicInfo();
+
+  console.log('metadata:', metadata);
+  console.log('basicInfo:', basicInfo);
+
+  useEffect(() => {}, []);
 
   return (
     <div className={styles.info}>
@@ -46,18 +48,18 @@ export default () => {
       <div className={styles.supplyAndTime}>
         <span className={styles.totalSupply}>
           <span className={styles.label}>Total hashpower supply</span>
-          <span className={styles.value}>{project?.supply?.toNumber()}TH/s</span>
+          <span className={styles.value}>{basicInfo.supply}TH/s</span>
         </span>
 
         <span className={styles.deliveryTimes}>
           <span className={styles.label}>Delivery times</span>
-          <span className={styles.value}>{project?.deliveryTimes}Times</span>
+          <span className={styles.value}>{basicInfo.deliveryTimes}Times</span>
         </span>
 
         <span className={styles.deliveryTime}>
           <span className={styles.label}>Delivery time</span>
           <span className={styles.value}>
-            {project?.deliveryStart.format('YYYY/MM/DD')}-{project?.deliveryEnd.format('YYYY/MM/DD')}
+            {basicInfo.deliveryStart?.format('YYYY/MM/DD')}-{basicInfo.deliveryEnd?.format('YYYY/MM/DD')}
           </span>
         </span>
       </div>
@@ -66,7 +68,7 @@ export default () => {
       <div className={styles.someAmount}>
         <span className={styles.item} style={{ marginRight: '170px' }}>
           <span className={styles.label}>Initial payment</span>
-          <span className={styles.value}>{project?.initialPayment || '-'} USDT</span>
+          <span className={styles.value}>{basicInfo.initialPayment || '-'} USDT</span>
         </span>
         <span className={styles.item} style={{ marginRight: '150px' }}>
           <span className={styles.label}>Option Account balance</span>
@@ -74,7 +76,7 @@ export default () => {
         </span>
         <span className={styles.item}>
           <span className={styles.label}>Deposit account balance</span>
-          <span className={styles.value}>{project?.depositAccountBalance || '-'} USDT</span>
+          <span className={styles.value}>{basicInfo.depositAccountBalance || '-'} USDT</span>
         </span>
       </div>
 

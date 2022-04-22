@@ -76,10 +76,13 @@ export default () => {
 
   // USDT
   const calcInitialPayment = (soldAmount: BigNumber | null, initialPaymentRatio: BigNumber) => {
+    console.log({ soldAmount: soldAmount?.toNumber(), initialPaymentRatio: initialPaymentRatio.toNumber() });
     if (soldAmount) {
-      const initialPayment = soldAmount.mul(initialPaymentRatio).div(BigNumber.from('10000'));
+      const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
+      const radio = initialPaymentRatio.toNumber() / 1e4;
+      const initialPayment = amount * radio;
 
-      return utils.formatEther(initialPayment);
+      return initialPayment;
     }
 
     return '';
@@ -92,7 +95,7 @@ export default () => {
 
       const times = duration.toNumber() / 3600 / 7 / 24;
 
-      return times;
+      return times + 1;
     }
 
     return 0;
@@ -212,6 +215,7 @@ export default () => {
         settledTimes,
         weekDayAmountsValues,
 
+        _price: price.toNumber(),
         _nodeTime: moment(currentTime).format('YYYY.MM.DD HH:mm:ss'),
         _startTime: startTimeMoment.format('YYYY.MM.DD HH:mm:ss'),
         _raiseStart: startTimeMoment.format('YYYY.MM.DD HH:mm:ss'),

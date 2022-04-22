@@ -9,7 +9,7 @@ export default () => {
   return (
     <div className={classnames(styles.footer, 'footer')}>
       {/* DEV */}
-      {!!timestamp && <span style={{ float: 'left', color: '#fff', lineHeight: '70px' }}>{dayjs(timestamp).format('YYYY.MM.DD HH:mm')}</span>}
+      {/* {!!timestamp && <span style={{ float: 'left', color: '#fff', lineHeight: '70px' }}>{dayjs(timestamp).format('YYYY.MM.DD HH:mm')}</span>} */}
 
       {/* <a href="" target="_blank" className={classnames(styles.wrapImage, styles.telegram)}></a> */}
       <a href="mailto:business@merlinprotocol.org" target="_blank" className={classnames(styles.wrapImage, styles.email)}></a>

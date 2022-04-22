@@ -23,7 +23,7 @@ const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 const NFT_CONTRACT_ADDRESS = process.env.NFT_CONTRACT_ADDRESS as string;
 
-const BuyModal: FC<{ project: ProjectInfo | undefined; onOk?: () => void }> = ({ project, children, onOk }) => {
+const BuyModal: FC<{ project: any; onOk?: () => void }> = ({ project, children, onOk }) => {
   const { account } = useEthers();
 
   const [visible, setVisible] = useState(false);
@@ -44,8 +44,8 @@ const BuyModal: FC<{ project: ProjectInfo | undefined; onOk?: () => void }> = ({
 
   useEffect(() => {
     if (volumn && project?.price) {
-      const _amount = project?.price.mul(BigNumber.from(volumn));
-      setAmount(utils.formatEther(_amount));
+      const _amount = project?.price * volumn;
+      setAmount(_amount);
     }
   }, [volumn, project]);
 
@@ -68,8 +68,13 @@ const BuyModal: FC<{ project: ProjectInfo | undefined; onOk?: () => void }> = ({
       message.error('Contract is null');
     }
 
+    if (!project) {
+      message.error('Error');
+    }
+
     try {
-      await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, account, utils.parseUnits(amount, 'ether').toString());
+      const _amount = utils.parseUnits(String(amount), project.usdtDecimals);
+      await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, account, _amount.toString());
 
       let tx = null;
       if (tab === BUY) {

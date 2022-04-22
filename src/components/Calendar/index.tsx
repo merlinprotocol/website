@@ -157,9 +157,15 @@ export default () => {
             <div>{moment(day.timestamp).format('DD')}</div>
 
             <div>
-              {day.deliverState === 0 && '未交付'}
-              {day.deliverState === 1 && '交付不足'}
-              {day.deliverState === 2 && '正常交付'}
+              {day.stage === 'Collection' ? (
+                '募集期'
+              ) : (
+                <>
+                  {day.deliverState === 0 && '未交付'}
+                  {day.deliverState === 1 && '交付不足'}
+                  {day.deliverState === 2 && '正常交付'}
+                </>
+              )}
             </div>
 
             <div>
@@ -173,9 +179,17 @@ export default () => {
             </div>
             <div>
               {day.isSettleDay && (
-                <Button type="link" onClick={() => onSettle(day.index)} disabled={!account}>
-                  结算
-                </Button>
+                <>
+                  {day.isSettled ? (
+                    <Button type="link" disabled>
+                      已结算
+                    </Button>
+                  ) : (
+                    <Button type="link" onClick={() => onSettle(day.index)} disabled={!account}>
+                      结算
+                    </Button>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -241,7 +255,7 @@ export default () => {
         <Space>
           <span>{currentMoment.format('YYYY.MM.DD HH:mm')}</span>
           {years.length && (
-            <Select defaultValue={currentMoment.get('year')} onChange={onYearChanged}>
+            <Select value={currentMoment.get('year')} onChange={onYearChanged}>
               {years.map((year) => (
                 <Option key={year} value={year}>
                   {year}

@@ -1,10 +1,15 @@
+import { useRef, useEffect, useState } from 'react';
+import Web3 from 'web3';
+import { Button } from 'antd';
+import { useEthers } from '@usedapp/core';
+
 import classnames from 'classnames';
 import styles from './History.less';
 
 const Item = ({ data }: { data: any }) => {
   return (
     <div className={styles.Item}>
-      <span>{data.no}</span>
+      <span>{data.index + 1}</span>
       <span>{data.time}</span>
       <span>
         交付:
@@ -15,64 +20,67 @@ const Item = ({ data }: { data: any }) => {
             [styles.warn]: data.settled < data.minSettle,
           })}
         >
-          {data.settled}BTC
+          {data.wbtcDelivered / 1e8}WBTC
         </span>
-        <span>/{data.minSettle}BTC</span>
+        <span>/{data.wbtcMinted / 1e8}WBTC</span>
       </span>
       <span>
-        收益: {data.mintedBTC}BTC {data.mintedUSDT && '、' + data.mintedUSDT + 'USDT'}
+        收益: {data.wbtcBalance / 1e8 || data.wbtcClaimed / 1e8}WBTC、 {data.usdtBalance / 1e6 || data.usdtCompensation / 1e6 + 'USDT'}
       </span>
       <span
         className={classnames(styles.wrapBtn, {
-          [styles.disabled]: data.claimed,
+          [styles.disabled]: data.wbtcClaimed,
         })}
       >
-        <span>Claim</span>
+        <Button
+          type="link"
+          disabled={data.wbtcClaimed}
+          onClick={async () => {
+            await data.claim();
+            await data.update();
+          }}
+        >
+          Claim
+        </Button>
       </span>
     </div>
   );
 };
 
-const history = [
-  {
-    no: 4,
-    time: '2022.03.13 00:00:00',
-    settled: 5.6,
-    minSettle: 5.6,
-    mintedBTC: 0.8,
-    claimed: false,
-  },
-  {
-    no: 3,
-    time: '2022.03.20 00:00:00',
-    settled: 5.8,
-    minSettle: 5.6,
-    mintedBTC: 1,
-    claimed: false,
-  },
-  {
-    no: 2,
-    time: '2022.03.27 00:00:00',
-    settled: 5.4,
-    minSettle: 5.6,
-    mintedBTC: 0.8,
-    mintedUSDT: 10,
-    claimed: true,
-  },
-  {
-    no: 1,
-    time: '2022.04.03 00:00:00',
-    settled: 5.6,
-    minSettle: 5.6,
-    mintedBTC: 0.6,
-    claimed: true,
-  },
-];
 export default () => {
+  const sdk = useRef<any>(null);
+  const { account } = useEthers();
+  const [inverstments, setInverstments] = useState<any[]>([]);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  useEffect(() => {
+    if (account && sdk.current) {
+      queryInverstments();
+    }
+  }, [sdk.current, account]);
+
+  const init = async () => {
+    const SDK = require('@/sdk');
+    sdk.current = new SDK(
+      Web3.givenProvider,
+      process.env.HASHRATE_CONTRACT_ADDRESS,
+      process.env.SETTLE_TOKEN_CONTRACT_ADDRESS,
+      process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS,
+    );
+  };
+
+  const queryInverstments = async () => {
+    const _inverstments = await sdk.current!.inverstments(account);
+    console.log('_inverstments:', _inverstments);
+    setInverstments(_inverstments);
+  };
   return (
     <div className={styles.history}>
-      {history.map((item: any) => (
-        <Item key={item.no} data={item}></Item>
+      {inverstments.map((item: any) => (
+        <Item key={item.index} data={item}></Item>
       ))}
     </div>
   );

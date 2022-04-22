@@ -6,10 +6,14 @@ import styles from './Banner.less';
 import { ProjectInfo } from '@/hooks/useProject';
 import { utils } from 'ethers';
 import moment from 'moment';
+import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 
 const SECONDS_PER_WEEK = 7 * 24 * 3600;
 
-export default ({ project, metadata }: { project: ProjectInfo | undefined; metadata?: any }) => {
+export default () => {
+  const metadata = useMetadata();
+  const basicInfo = useBasicInfo();
+
   const [raising, setRaising] = useState(false); // 募集中
   const [timeLeft, setTimeLeft] = useState<moment.Duration>(); // 募集期剩余时间
   const [soldPercent, setSoldPercent] = useState(0);
@@ -19,11 +23,11 @@ export default ({ project, metadata }: { project: ProjectInfo | undefined; metad
   useEffect(() => {
     let timer: any = null;
 
-    if (project && moment().isAfter(project?.raiseStart) && moment().isBefore(project?.raiseEnd)) {
+    if (basicInfo && moment().isAfter(basicInfo?.raiseStart) && moment().isBefore(basicInfo?.raiseEnd)) {
       setRaising(true);
 
       timer = setInterval(() => {
-        const duration = moment.duration(project.raiseEnd.diff(moment()));
+        const duration = moment.duration(basicInfo.raiseEnd.diff(moment()));
 
         setTimeLeft(duration);
       }, 50);
@@ -32,14 +36,14 @@ export default ({ project, metadata }: { project: ProjectInfo | undefined; metad
     return () => {
       timer && clearInterval(timer);
     };
-  }, [project]);
+  }, [basicInfo]);
 
   // calc process
   useEffect(() => {
-    if (project) {
-      setSoldPercent(project.sold.toNumber() / project.supply.toNumber());
+    if (basicInfo) {
+      setSoldPercent(basicInfo.sold / basicInfo.supply);
     }
-  }, [project]);
+  }, [basicInfo]);
 
   return (
     <div className={styles.banner}>
@@ -57,7 +61,7 @@ export default ({ project, metadata }: { project: ProjectInfo | undefined; metad
           </div>
 
           <div className={styles.right}>
-            <Link to={`/launchpad/${project?.contract}`} style={{ color: '#fff' }}>
+            <Link to={`/launchpad/${basicInfo?.contract}`} style={{ color: '#fff' }}>
               <RightOutlined />
               More
             </Link>
@@ -73,15 +77,15 @@ export default ({ project, metadata }: { project: ProjectInfo | undefined; metad
         <div className={styles.data}>
           <span className={styles.item}>
             <span className={styles.label}>售价</span>
-            <span className={styles.value}>{project?.price ? utils.formatEther(project?.price) : '-'} USDT</span>
+            <span className={styles.value}>{basicInfo?.price || '-'} USDT</span>
           </span>
           <span className={styles.item}>
             <span className={styles.label}>算力总供应</span>
-            <span className={styles.value}>{project?.supply?.toNumber()} TH/s</span>
+            <span className={styles.value}>{basicInfo?.supply} TH/s</span>
           </span>
           <span className={styles.item}>
             <span className={styles.label}>挖矿周期</span>
-            <span className={styles.value}>{project?.contractDuraction?.toNumber() / SECONDS_PER_WEEK} Week</span>
+            <span className={styles.value}>{basicInfo?.contractDuraction / SECONDS_PER_WEEK} Week</span>
           </span>
           <span className={styles.item}>
             <span className={styles.label}>Time left</span>
@@ -111,7 +115,7 @@ export default ({ project, metadata }: { project: ProjectInfo | undefined; metad
         </div>
 
         {/* Buy */}
-        <BuyModal project={project}>
+        <BuyModal project={basicInfo}>
           <div className={styles.buy}>
             <span className={styles.button}>获取算力</span>
           </div>

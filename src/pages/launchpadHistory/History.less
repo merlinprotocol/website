@@ -30,7 +30,10 @@
   .wrapBtn {
     margin-left: auto;
 
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     flex: 0 0 81px;
     height: 27px;
     border-radius: 12px;
@@ -41,6 +44,13 @@
     font-weight: bold;
     text-align: center;
     cursor: pointer;
+
+    :global {
+      .ant-btn {
+        color: #fff;
+        padding: 0;
+      }
+    }
   }
   .disabled {
     background: #bfbfbf;
@@ -49,10 +59,11 @@
 }
 
 .history {
-  height: 670px;
+  // height: 670px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 41px;
+  padding-bottom: 60px;
 }

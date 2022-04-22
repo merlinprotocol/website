@@ -1,10 +1,14 @@
 const Web3 = require('web3');
+const moment = require('moment');
 const ABIProject = require('./abis/Project.json');
 const ABISplitter = require('./abis/PaymentSplitter.json');
 const ABIERC20 = require('./abis/ERC20.json');
 
 const DAYS = 3600 * 24;
 const WEEKS = DAYS * 7;
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+const { BN } = Web3.utils;
 
 module.exports = class SDK {
   constructor(rpcOrProvider, projectAddr, wbtcAddr, usdtAddr) {
@@ -24,35 +28,109 @@ module.exports = class SDK {
     var bestBlock = await this.web3.eth.getBlock(blockNumber);
 
     var wbtcAmounts = await this.project.methods.getWeekDayAmounts().call();
-
+    const settleds = await this.project.methods.getSettled().call();
     var objs = new Array();
     for (var i = 0; i < this.dayCount; i++) {
       var obj = new Object();
       obj.index = i;
       obj.timestamp = startTime + i * DAYS;
       obj.stage = this.currentStage(obj.timestamp, startTime);
+      obj.isSettleDay = obj.stage != 'Collection' && i != 7 && i % 7 == 0;
+      obj.isSettled = obj.isSettleDay && settleds[Math.floor(i / 7 - 2)] != ZERO_ADDRESS;
+
       obj.isDeliverEnable = false;
       if (bestBlock.timestamp >= obj.timestamp && bestBlock.timestamp < obj.timestamp + DAYS) {
         obj.isCurrent = true;
-        var pos = i % 7;
-        for (var j = i - pos; j < i; j++) {
-          if (obj.stage != 'Collection') objs[j].isDeliverEnable = true;
+        if (!obj.isSettled) {
+          for (var j = 1; j <= 7; j++) {
+            if (i - j >= 0 && objs[i - j].stage != 'Collection') {
+              if (objs[i - j].isSettled) {
+                objs[i - j].isDeliverEnable = true;
+                break;
+              }
+              objs[i - j].isDeliverEnable = true;
+            }
+            // if (obj.stage != 'Collection') objs[j].isDeliverEnable = true;
+          }
         }
       } else {
         obj.isCurrent = false;
       }
 
       obj.isSettleDay = obj.stage != 'Collection' && i != 7 && i % 7 == 0;
+      obj.isSettled = obj.isSettleDay && settleds[Math.floor(i / 7 - 2)] != ZERO_ADDRESS;
+
       const week = Math.floor(i / 7);
       const day = i % 7;
       if (obj.stage != 'Collection') obj.wbtcAmount = parseInt(wbtcAmounts[week - 1][day]);
       //TODO
       obj.hashrate = 0;
       obj.usdtAmount = 0;
-      obj.deliverState = 0;
+      obj.deliverState = await this.getDeliverState(obj.timestamp); // 是否足额交付
+      obj.wbtcMinted = await this.getMinted(obj.timestamp); // 应交付wbtc
       objs.push(obj);
     }
     return startTime, objs;
+  }
+
+  async getBasicInfo() {
+    const projectMethods = this.project.methods;
+
+    const supply = await projectMethods.getSupply().call();
+    const usdtDecimals = await this.usdt.methods.decimals().call();
+    const price = (await projectMethods.getPrice().call()) / Math.pow(10, usdtDecimals);
+    const sold = await projectMethods.getSold().call();
+    const soldAmount = sold * price;
+    const initialPaymentRatio = (await projectMethods.initialPaymentRatio().call()) / 1e4;
+    const initialPayment = soldAmount * initialPaymentRatio;
+    const depositAccountBalance = soldAmount - initialPayment;
+
+    const startTime = parseInt(await projectMethods.startTime().call());
+
+    const deliveryStart = new BN(startTime).add(new BN(collectionPeriodDuration));
+    const contractDuraction = parseInt(await projectMethods.contractDuraction().call());
+    const collectionPeriodDuration = await projectMethods.collectionPeriodDuration().call();
+    const deliveryTimes = (contractDuraction - collectionPeriodDuration) / WEEKS + 1;
+
+    // const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
+    // const radio = initialPaymentRatio.toNumber() / 1e4;
+    // const initialPayment = amount * radio;
+
+    return {
+      supply,
+      usdtDecimals,
+      price,
+      sold,
+      soldAmount,
+      initialPaymentRatio,
+      initialPayment,
+      depositAccountBalance,
+
+      startTime: moment(startTime * 1000),
+      raiseStart: moment(startTime * 1000),
+      raiseEnd: moment(startTime * 1000).add(parseInt(collectionPeriodDuration) - 1, 'seconds'),
+      deliveryStart: moment(deliveryStart.toNumber() * 1000),
+      deliveryEnd: moment((startTime + contractDuraction) * 1000),
+      contractDuraction: parseInt(contractDuraction),
+      collectionPeriodDuration: parseInt(collectionPeriodDuration),
+      deliveryTimes,
+    };
+  }
+
+  async getMetadata() {
+    try {
+      const tokenURI = await this.project.methods.getURI().call();
+
+      if (!tokenURI) return;
+
+      const response = await fetch(tokenURI);
+      const res = await response.json();
+
+      return res;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   currentInfo(ts, startTime) {
@@ -109,35 +187,30 @@ module.exports = class SDK {
    * @returns
    */
   async settle(idx, amount, account) {
-    return await this.project.methods.settle(idx - 6, amount).send({ from: account });
+    return await this.project.methods.settle(idx / 7 - 2, amount).send({ from: account });
   }
 
   /**
-   *
-   * @param {*} idx
-   * @param {*} amount
+   * @desc 交付
+   * @param {*} projectContract
+   * @param {*} project
+   * @param {*} tokenContract
    * @param {*} account
+   * @param {*} date
+   * @param {*} amount
    * @returns
    */
   async deliver(idx, amount, account) {
     const projectAddr = this.project._address;
 
-    console.log('this:', this);
-    const { BN, toWei } = this.web3.utils;
     const allowance = await this.wbtc.methods.allowance(account, projectAddr).call();
-    console.log('allowance:', typeof allowance, allowance);
 
-    console.log('amount: ', amount);
-    console.log('decimals:', await this.wbtc.methods.decimals().call());
+    const { BN } = this.web3.utils;
     const wbtcAmount = amount * Math.pow(10, await this.wbtc.methods.decimals().call());
-    console.log('wbtcAmount: ', wbtcAmount);
-
-    if (new BN(allowance).lt(new BN(amount))) {
-      // const maxApproval = toWei((2 ** 64 - 1).toString(), 8);
+    if (new BN(allowance).lt(new BN(wbtcAmount))) {
       await this.wbtc.methods.approve(projectAddr, wbtcAmount).send({ from: account });
     }
 
-    console.log('idx:', idx);
     const tx = await this.project.methods.deliver(idx - 7, wbtcAmount).send({ from: account });
     return tx;
   }
@@ -152,6 +225,9 @@ module.exports = class SDK {
     var objs = new Array();
     for (var i = 0; i < settleds.length; i++) {
       const address = settleds[i];
+      if (address == ZERO_ADDRESS) {
+        break;
+      }
       var splitter = new this.web3.eth.Contract(ABISplitter, address);
       const shares = parseInt(await splitter.methods.shares(account).call());
       if (shares > 0) {
@@ -173,6 +249,7 @@ module.exports = class SDK {
         obj.usdtBalance = obj.usdtCompensation == 0 ? 0 : (obj.usdtCompensation / obj.totalShares) * obj.shares;
         const usdtClaimed = parseInt(await splitter.methods.released(this.usdt._address, account).call());
         obj.usdtBalance -= usdtClaimed;
+        obj.wbtcMinted = await this.getMinted(/** timestamp */); // 应交付wbtc
         // obj.usdtTotal = parseInt(await this.usdt.methods.balanceOf(address).call());
         // obj.usdtBalance = (obj.usdtTotal==0) ? 0 : obj.usdtTotal / totalShares * shares;
         // obj.wbtcReleased = parseInt(await splitter.methods.released(this.wbtc._address, account).call());
@@ -205,6 +282,32 @@ module.exports = class SDK {
     } catch (error) {
       return null;
     }
+  }
+
+  /**
+   * @desc 查询当天应交付(挖矿产出)WBTC
+   * @param {*} timestamp
+   * @returns
+   */
+  async getMinted(timestamp) {
+    return 0;
+  }
+
+  /**
+   * @desc 是否足额交付 0-未交付 1-交付不足 2-足额交付
+   * @param {*} timestamp
+   * @returns 0 | 1 | 2
+   */
+  async getDeliverState(timestamp) {
+    return Math.floor(Math.random() * 3);
+  }
+
+  /**
+   * @desc 保险池金额
+   * @returns
+   */
+  async getOptionAccountBalance() {
+    return 0;
   }
 };
 
