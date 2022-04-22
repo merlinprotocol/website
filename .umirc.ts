@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 
 export default defineConfig({
   outputPath: 'docs',
+  base: '/website/',
 
   favicon: '/favicon.png',
 
