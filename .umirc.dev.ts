@@ -4,8 +4,6 @@ export default defineConfig({
   define: {
     // 'process.env.NETWORK': 'http://8.210.141.80:4000',
     'process.env.NETWORK': 'http://8.210.141.80:8545/',
-    // 'process.env.NETWORK': 'https://data-seed-prebsc-1-s1.binance.org:8545',
-    // 'process.env.NETWORK': 'https://rinkeby.infura.io/v3/63730a838c7f47058a73a67775d736c2',
 
     'process.env.WHITELIST_CONTRACT_ADDRESS': '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
     'process.env.HASHRATE_CONTRACT_ADDRESS': '0x712516e61C8B383dF4A63CFe83d7701Bce54B03e',

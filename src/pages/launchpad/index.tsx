@@ -6,6 +6,7 @@ import List from './List';
 import styles from './index.less';
 
 export default () => {
+  // ..
   return (
     <div className={styles.launchpadList}>
       <Header></Header>
