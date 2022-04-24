@@ -3,8 +3,6 @@ import { Link } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import BuyModal from '@/components/BuyModal2';
 import styles from './Banner.less';
-import { ProjectInfo } from '@/hooks/useProject';
-import { utils } from 'ethers';
 import moment from 'moment';
 import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 

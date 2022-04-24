@@ -15,7 +15,6 @@ export default () => {
   const [hidden, setHidden] = useState(false);
 
   const deltaY = useRef(0);
-  const hiddenRef = useRef(false);
   const [ontop, setOntop] = useState(true);
 
   useEffect(() => {
@@ -37,26 +36,6 @@ export default () => {
 
     deltaY.current = mouseWheel;
   }, [mouseWheel]);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
-
-  // const handleScroll = () => {
-  //   console.log(hiddenRef.current);
-  //   // 下拉隐藏
-  //   if (window.scrollY > scrollY.current) {
-  //     if (!hiddenRef.current) hiddenRef.current = true;
-  //   } else {
-  //     // 向上显示
-  //     if (hiddenRef.current) hiddenRef.current = false;
-  //   }
-
-  //   scrollY.current = window.scrollY;
-  // };
 
   const menu = (
     <Menu style={{ width: '144px' }}>

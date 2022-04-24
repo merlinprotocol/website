@@ -51,7 +51,7 @@ export default (account: string | null | undefined) => {
           }
         }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         continue;
       }
     }

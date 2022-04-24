@@ -13,7 +13,7 @@ export default () => {
     try {
       const blockNumber = await library?.send('eth_blockNumber', []);
       const block = await library?.send('eth_getBlockByNumber', [blockNumber, false]);
-      const time = parseInt(block.timestamp);
+      const time = parseInt(block?.timestamp);
 
       setTimestamp(time * 1000);
     } catch (error) {

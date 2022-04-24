@@ -21,7 +21,6 @@ const BIND = 'Bind';
 const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
-const NFT_CONTRACT_ADDRESS = process.env.NFT_CONTRACT_ADDRESS as string;
 
 const BuyModal: FC<{ project: any; onOk?: () => void }> = ({ project, children, onOk }) => {
   const { account } = useEthers();
