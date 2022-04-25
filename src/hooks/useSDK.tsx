@@ -44,7 +44,7 @@ export const useBasicInfo = (chainId: string | number, project: string) => {
   }, []);
 
   const init = async () => {
-    const basic = await sdk.current.getBasicInfo();
+    const basic = await sdk?.current.getBasicInfo();
     setBasicInfo(basic);
   };
 

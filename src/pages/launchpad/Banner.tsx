@@ -40,7 +40,7 @@ export default () => {
   // calc process
   useEffect(() => {
     if (basicInfo) {
-      setSoldPercent(basicInfo.sold / basicInfo.supply);
+      setSoldPercent(Math.floor((basicInfo.sold / basicInfo.supply) * 1e4) / 1e4);
     }
   }, [basicInfo]);
 

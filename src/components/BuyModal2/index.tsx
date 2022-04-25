@@ -24,6 +24,7 @@ const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRES
 
 const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, children, wrapBtnClassName }) => {
   const { account } = useEthers();
+  const [loading, setLoading] = useState(false);
 
   const [visible, setVisible] = useState(false);
   const [tab, setTab] = useState(BUY);
@@ -57,7 +58,6 @@ const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, ch
   };
 
   const handleSubmit = async () => {
-    console.log(volumn, amount, HASHRATE_CONTRACT_ADDRESS, vendingContract);
     if (!account) {
       message.error('Wallet disconnect');
       return;
@@ -72,6 +72,8 @@ const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, ch
     }
 
     try {
+      setLoading(true);
+
       const _amount = utils.parseUnits(String(amount), project.usdtDecimals);
       await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, account, _amount.toString());
 
@@ -87,10 +89,13 @@ const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, ch
         tx = await vendingContract?.bind(HASHRATE_CONTRACT_ADDRESS, contract, tokenId, volumn);
       }
 
+      await tx.wait();
       setHash(tx.hash);
       setCongration(true);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -186,7 +191,7 @@ const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, ch
 
                 <div className={styles.wrapButton}>
                   <a type="button" className={styles.button} onClick={handleSubmit}>
-                    {tab}
+                    {loading ? 'Pending...' : tab}
                   </a>
                 </div>
               </div>
