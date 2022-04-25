@@ -12,7 +12,7 @@ import styles from './NavMenus.less';
 const menu = (
   <Menu style={{ width: '144px' }}>
     <Menu.Item>
-      <Link to="/launchpad">我申购的项目</Link>
+      <Link to="/mybuyhistory">我申购的项目</Link>
     </Menu.Item>
     <Menu.Item>
       <Link to="/calendar">我创建的项目</Link>
