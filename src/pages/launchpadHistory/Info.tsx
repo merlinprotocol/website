@@ -2,17 +2,15 @@ import { useEffect } from 'react';
 import { useParams } from 'umi';
 import classnames from 'classnames';
 import styles from './Info.less';
+import BuyModal from '@/components/BuyModal2';
 
 import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 
 export default () => {
-  const { contract }: any = useParams();
+  const { contract, chainId }: any = useParams();
 
-  const metadata = useMetadata();
-  const basicInfo = useBasicInfo();
-
-  console.log('metadata:', metadata);
-  console.log('basicInfo:', basicInfo);
+  const metadata = useMetadata(chainId, contract);
+  const basicInfo = useBasicInfo(chainId, contract);
 
   useEffect(() => {}, []);
 
@@ -41,7 +39,13 @@ export default () => {
         <span className={styles.text}>
           {metadata?.description}:{contract}
         </span>
-        <span className={styles.buyBtn}>购买</span>
+
+        {/* Buy */}
+        <BuyModal project={basicInfo} wrapBtnClassName={styles.wrapBtn}>
+          <div className={styles.buy}>
+            <span className={styles.buyBtn}>购买</span>
+          </div>
+        </BuyModal>
       </div>
 
       {/* Supply && Time */}

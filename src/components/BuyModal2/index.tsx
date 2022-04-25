@@ -22,7 +22,7 @@ const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as strin
 const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 
-const BuyModal: FC<{ project: any; onOk?: () => void }> = ({ project, children, onOk }) => {
+const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, children, wrapBtnClassName }) => {
   const { account } = useEthers();
 
   const [visible, setVisible] = useState(false);
@@ -95,7 +95,7 @@ const BuyModal: FC<{ project: any; onOk?: () => void }> = ({ project, children, 
   };
 
   return (
-    <div>
+    <div className={classnames('wrapBuyModal')}>
       <Modal
         title={null}
         footer={null}
@@ -195,7 +195,7 @@ const BuyModal: FC<{ project: any; onOk?: () => void }> = ({ project, children, 
         </div>
       </Modal>
 
-      <div style={{ cursor: 'pointer' }} onClick={onClickButton}>
+      <div style={{ cursor: 'pointer' }} onClick={onClickButton} className={wrapBtnClassName}>
         {children}
       </div>
     </div>

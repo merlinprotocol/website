@@ -2,7 +2,7 @@ import { defineConfig } from 'umi';
 
 export default defineConfig({
   define: {
-    // 'process.env.NETWORK': 'http://8.210.141.80:4000',
+    // 'process.env.NETWORK': 'http://8.210.141.80:8545',
     'process.env.NETWORK': 'http://127.0.0.1:8545',
     // 'process.env.NETWORK': 'https://data-seed-prebsc-1-s1.binance.org:8545',
     // 'process.env.NETWORK': 'https://rinkeby.infura.io/v3/63730a838c7f47058a73a67775d736c2',
