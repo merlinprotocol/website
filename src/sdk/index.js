@@ -76,6 +76,15 @@ module.exports = class SDK {
     return startTime, objs;
   }
 
+  async getInitialPaymentBalance() {
+    const ratio = await this.project.methods.calculatedInitialPaymentRatio().call();
+    if (ratio == 0) {
+      return 0;
+    }
+    const result = await this.project.methods.initialPaymentAmounts().call();
+    return result['1'];
+  }
+
   async getBasicInfo() {
     const projectMethods = this.project.methods;
 
@@ -84,8 +93,7 @@ module.exports = class SDK {
     const price = (await projectMethods.getPrice().call()) / Math.pow(10, usdtDecimals);
     const sold = await projectMethods.getSold().call();
     const soldAmount = sold * price;
-    const initialPaymentRatio = (await projectMethods.initialPaymentRatio().call()) / 1e4;
-    const initialPayment = soldAmount * initialPaymentRatio;
+    const initialPayment = await this.getInitialPaymentBalance();
     const depositAccountBalance = soldAmount - initialPayment;
 
     const startTime = parseInt(await projectMethods.startTime().call());
@@ -105,7 +113,6 @@ module.exports = class SDK {
       price,
       sold,
       soldAmount,
-      initialPaymentRatio,
       initialPayment,
       depositAccountBalance,
 
@@ -346,8 +353,6 @@ module.exports = class SDK {
 
     const tx = await this.vending.methods.buy(this.project._address, volumn).send({ from });
 
-    console.log({ price, amount: amount.toNumber(), allowance });
-    console.log('tx', tx);
     return tx;
     // const sold = await this.project.methods.getSold().call();
     // console.log('check sold:', sold);
