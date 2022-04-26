@@ -16,21 +16,8 @@ const customizeRenderEmpty = () => (
   </div>
 );
 
-const BasicLayout: React.FC = ({ children }) => {
-  useEffect(() => {
-    console.log('0.1.2');
-  }, []);
-  return (
-    <div className={styles.layout}>
-      <div className={styles.content}>{children}</div>
-    </div>
-  );
-};
-
 export default (props: React.PropsWithChildren<{}>) => (
   <DAppProvider config={config}>
-    <ConfigProvider renderEmpty={customizeRenderEmpty}>
-      <BasicLayout>{props.children}</BasicLayout>
-    </ConfigProvider>
+    <ConfigProvider renderEmpty={customizeRenderEmpty}>{props.children}</ConfigProvider>
   </DAppProvider>
 );

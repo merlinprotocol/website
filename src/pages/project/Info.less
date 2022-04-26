@@ -8,6 +8,11 @@
   background: url(~@/assets/bg-1.png) no-repeat center / cover;
 }
 
+.content {
+  width: 1252px;
+  margin: 0 auto;
+}
+
 .top {
   display: flex;
   flex-direction: row;
@@ -51,7 +56,6 @@
   margin-bottom: 110px;
 
   .text {
-    flex: 0 0 606px;
     font-size: 25px;
     font-weight: bold;
   }
@@ -126,7 +130,6 @@
     display: flex;
     flex-direction: column;
     margin-left: auto;
-    margin-right: 110px;
 
     .label {
       font-size: 14px;
@@ -144,6 +147,7 @@
   display: flex;
   flex-direction: row;
   padding-bottom: 60px;
+  justify-content: space-between;
 
   .item {
     display: flex;
@@ -162,6 +166,7 @@
 
 .stageBar {
   padding-bottom: 480px;
+  display: flex;
 
   .item {
     position: relative;
@@ -184,15 +189,15 @@
     }
   }
   .collection {
-    width: 290px;
+    flex: 0 0 290px;
     background-color: #c75793;
   }
   .overation {
-    width: 465px;
+    flex: 0 0 380px;
     background-color: #e5ca8a;
   }
   .operating {
-    width: 613px;
+    flex: 1;
     background-color: #5186bf;
   }
 }
