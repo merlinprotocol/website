@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, useLocation } from 'umi';
+import { useLocation } from 'umi';
 import classnames from 'classnames';
 import styles from './Info.less';
 import BuyModal from '@/components/BuyModal2';
@@ -7,15 +7,13 @@ import BuyModal from '@/components/BuyModal2';
 import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 
 export default () => {
-  const { contract, chainId }: any = useParams();
   const {
     query: { addr, network },
   }: any = useLocation();
 
+  console.log('network', network);
   const metadata = useMetadata(network || 'hardhat', addr);
   const basicInfo = useBasicInfo(network || 'hardhat', addr);
-
-  useEffect(() => {}, []);
 
   return (
     <div className={styles.info}>

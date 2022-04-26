@@ -1,14 +1,8 @@
 import { FC, useState, useEffect } from 'react';
-import { Modal, Tabs, Form, Input, InputNumber, Button, message, Select, Spin } from 'antd';
-import { ProjectInfo } from '@/hooks/useProject';
+import { Modal, message } from 'antd';
 import close from '@/assets/icon-close.png';
 import people from '@/assets/people.png';
-import { utils, BigNumber } from 'ethers';
-import { useContract } from '@/hooks/useContract';
-import vendingABI from '@/abis/vending.json';
-import erc20ABI from '@/abis/erc20.json';
 import { useEthers } from '@usedapp/core';
-import { paymentTokenApprove } from '@/actions/project';
 import { shortAddress } from '@/utils';
 import useOwnerNFTs from '@/hooks/useOwnerNFTs';
 import config from '@/config';
@@ -19,10 +13,6 @@ import styles from './index.less';
 const networks: any = config.networks;
 const BUY = 'Buy';
 const BIND = 'Bind';
-
-const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as string;
-const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
-const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 
 const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; project: any; wrapBtnClassName?: string }> = ({
   projectInfo,
@@ -41,9 +31,6 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
   const [amount, setAmount] = useState<string>(''); // 购买总额(USDT)
   const [hash, setHash] = useState('');
   const [selectedNFT, setSelectedNFT] = useState<any>(null); // bind时选择的NFT
-
-  const vendingContract = useContract(VENDING_CONTRACT_ADDRESS, vendingABI);
-  const paymentTokenContract = useContract(PAYMENT_TOKEN_CONTRACT_ADDRESS, erc20ABI);
 
   const { nfts, loading: loadingNfts } = useOwnerNFTs(account);
 
@@ -70,10 +57,6 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
       return;
     }
 
-    if (!paymentTokenContract) {
-      message.error('Contract is null');
-    }
-
     if (!project) {
       message.error('Error');
     }
@@ -90,12 +73,12 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
       if (tab === BUY) {
         tx = await sdk.buy(volumn, account);
       } else if (tab === BIND) {
-        if (!selectedNFT) {
-          message.error('NFT not select!');
-          return;
-        }
-        const [contract, tokenId] = selectedNFT.split('_');
-        await vendingContract?.bind(HASHRATE_CONTRACT_ADDRESS, contract, tokenId, volumn);
+        // if (!selectedNFT) {
+        //   message.error('NFT not select!');
+        //   return;
+        // }
+        // const [contract, tokenId] = selectedNFT.split('_');
+        // await vendingContract?.bind(HASHRATE_CONTRACT_ADDRESS, contract, tokenId, volumn);
       }
 
       setHash(tx.transactionHash);
