@@ -41,7 +41,14 @@ export default () => {
         </span>
 
         {/* Buy */}
-        <BuyModal project={basicInfo} wrapBtnClassName={styles.wrapBtn}>
+        <BuyModal
+          projectInfo={{
+            chainId: chainId,
+            projectAddr: contract,
+          }}
+          project={basicInfo}
+          wrapBtnClassName={styles.wrapBtn}
+        >
           <div className={styles.buy}>
             <span className={styles.buyBtn}>购买</span>
           </div>

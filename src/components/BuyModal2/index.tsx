@@ -11,10 +11,12 @@ import { useEthers } from '@usedapp/core';
 import { paymentTokenApprove } from '@/actions/project';
 import { shortAddress } from '@/utils';
 import useOwnerNFTs from '@/hooks/useOwnerNFTs';
+import config from '@/config';
 
 import classnames from 'classnames';
 import styles from './index.less';
 
+const network: any = config.network;
 const BUY = 'Buy';
 const BIND = 'Bind';
 
@@ -22,7 +24,12 @@ const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as strin
 const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 
-const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, children, wrapBtnClassName }) => {
+const BuyModal: FC<{ projectInfo: { chainId: string | number; projectAddr: string }; project: any; wrapBtnClassName?: string }> = ({
+  projectInfo,
+  project,
+  children,
+  wrapBtnClassName,
+}) => {
   const { account } = useEthers();
   const [loading, setLoading] = useState(false);
 
@@ -74,23 +81,24 @@ const BuyModal: FC<{ project: any; wrapBtnClassName?: string }> = ({ project, ch
     try {
       setLoading(true);
 
-      const _amount = utils.parseUnits(String(amount), project.usdtDecimals);
-      await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, account, _amount.toString());
+      const SDK = require('@/sdk');
+      const { chainId, projectAddr } = projectInfo;
+      const { provider, wbtc, usdt, vending } = network[chainId];
+      const sdk = new SDK(provider, projectAddr, wbtc, usdt, vending);
 
       let tx = null;
       if (tab === BUY) {
-        tx = await vendingContract?.buy(HASHRATE_CONTRACT_ADDRESS, volumn);
+        tx = await sdk.buy(volumn, account);
       } else if (tab === BIND) {
         if (!selectedNFT) {
           message.error('NFT not select!');
           return;
         }
         const [contract, tokenId] = selectedNFT.split('_');
-        tx = await vendingContract?.bind(HASHRATE_CONTRACT_ADDRESS, contract, tokenId, volumn);
+        await vendingContract?.bind(HASHRATE_CONTRACT_ADDRESS, contract, tokenId, volumn);
       }
 
-      await tx.wait();
-      setHash(tx.hash);
+      setHash(tx.transactionHash);
       setCongration(true);
     } catch (error) {
       console.error(error);

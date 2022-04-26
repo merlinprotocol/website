@@ -26,6 +26,7 @@
     "@usedapp/core": "^1.0.0",
     "@web3-react/core": "^6.1.9",
     "axios": "^0.26.0",
+    "bignumber.js": "^9.0.2",
     "dayjs": "^1.10.7",
     "graphql": "^16.3.0",
     "lodash": "^4.17.21",

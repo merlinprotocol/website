@@ -1,8 +1,10 @@
 const Web3 = require('web3');
 const moment = require('moment');
+const BigNumber = require('bignumber.js');
 const ABIProject = require('./abis/Project.json');
 const ABISplitter = require('./abis/PaymentSplitter.json');
 const ABIERC20 = require('./abis/ERC20.json');
+const ABIVending = require('./abis/Vending.json');
 
 const DAYS = 3600 * 24;
 const WEEKS = DAYS * 7;
@@ -11,11 +13,12 @@ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const { BN } = Web3.utils;
 
 module.exports = class SDK {
-  constructor(rpcOrProvider, projectAddr, wbtcAddr, usdtAddr) {
+  constructor(rpcOrProvider, projectAddr, wbtcAddr, usdtAddr, vendingAddr) {
     this.web3 = new Web3(rpcOrProvider);
     this.project = new this.web3.eth.Contract(ABIProject, projectAddr);
     this.wbtc = new this.web3.eth.Contract(ABIERC20, wbtcAddr);
     this.usdt = new this.web3.eth.Contract(ABIERC20, usdtAddr);
+    this.vending = new this.web3.eth.Contract(ABIVending, vendingAddr);
   }
 
   async ProjectCalendarInfo() {
@@ -285,11 +288,12 @@ module.exports = class SDK {
   }
 
   /**
-   * @desc 查询当天应交付(挖矿产出)WBTC
+   * @desc 查询指定日期的比特币挖矿产出
+   * startTime 转换成utc时间，
    * @param {*} timestamp
-   * @returns
+   * @returns btc balance staoshi
    */
-  async getMinted(timestamp) {
+  async getMinted(contract, startTime, offsetDay) {
     return 0;
   }
 
@@ -308,6 +312,46 @@ module.exports = class SDK {
    */
   async getOptionAccountBalance() {
     return 0;
+  }
+
+  /**
+   * @desc 获取指定日期的平均算力
+   * @param {*} timestamp
+   * @returns
+   */
+  async getHashrate(contract, startTime, offsetDay) {
+    return 0;
+  }
+
+  /**
+   * @desc 购买算力
+   * @param {*} volumn
+   */
+  async buy(volumn, from) {
+    // const _amount = utils.parseUnits(String(amount), project.usdtDecimals);
+    // await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, from, _amount.toString());
+    const price = await this.project.methods.getPrice().call();
+    const amount = new BigNumber(price).times(new BigNumber(volumn));
+    console.log('price:', price);
+    console.log('volumn:', new BigNumber(volumn).toNumber());
+
+    console.log('amount:', amount.toNumber());
+
+    // 授权
+    const allowance = await this.usdt.methods.allowance(from, this.vending._address).call();
+
+    if (new BigNumber(allowance).lt(amount)) {
+      await this.usdt.methods.approve(this.vending._address, amount).send({ from });
+    }
+
+    const tx = await this.vending.methods.buy(this.project._address, volumn).send({ from });
+
+    console.log({ price, amount: amount.toNumber(), allowance });
+    console.log('tx', tx);
+    return tx;
+    // const sold = await this.project.methods.getSold().call();
+    // console.log('check sold:', sold);
+    // console.log('done ✅');
   }
 };
 
