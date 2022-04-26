@@ -16,7 +16,7 @@ import config from '@/config';
 import classnames from 'classnames';
 import styles from './index.less';
 
-const network: any = config.network;
+const networks: any = config.networks;
 const BUY = 'Buy';
 const BIND = 'Bind';
 
@@ -24,7 +24,7 @@ const HASHRATE_CONTRACT_ADDRESS = process.env.HASHRATE_CONTRACT_ADDRESS as strin
 const VENDING_CONTRACT_ADDRESS = process.env.VENDING_CONTRACT_ADDRESS as string;
 const PAYMENT_TOKEN_CONTRACT_ADDRESS = process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS as string;
 
-const BuyModal: FC<{ projectInfo: { chainId: string | number; projectAddr: string }; project: any; wrapBtnClassName?: string }> = ({
+const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; project: any; wrapBtnClassName?: string }> = ({
   projectInfo,
   project,
   children,
@@ -82,8 +82,8 @@ const BuyModal: FC<{ projectInfo: { chainId: string | number; projectAddr: strin
       setLoading(true);
 
       const SDK = require('@/sdk');
-      const { chainId, projectAddr } = projectInfo;
-      const { provider, wbtc, usdt, vending } = network[chainId];
+      const { network, projectAddr } = projectInfo;
+      const { provider, wbtc, usdt, vending } = networks[network] || {};
       const sdk = new SDK(provider, projectAddr, wbtc, usdt, vending);
 
       let tx = null;

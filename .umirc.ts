@@ -71,7 +71,8 @@ export default defineConfig({
       component: '@/layouts/basic',
       routes: [
         { path: '/', component: '@/pages/home', title: 'Merlin protocol' }, // 首页
-        { path: '/launchpad/:chainId/:contract', component: '@/pages/launchpadHistory', title: 'Launchpad' }, // 详情页
+        { path: '/launchpad/project', component: '@/pages/project', title: 'Project' }, // 项目页
+        // { path: '/launchpad/:chainId/:contract', component: '@/pages/launchpadHistory', title: 'Launchpad' }, // 详情页
         { path: '/launchpad', component: '@/pages/launchpad', title: 'Launchpad' }, // 项目列表
         { path: '/mybuyhistory', component: '@/pages/myBuyHistory', title: 'Merlin protocol' }, // 我申购的项目
 

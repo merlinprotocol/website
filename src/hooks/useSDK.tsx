@@ -2,43 +2,31 @@ import { useRef, useState, useEffect } from 'react';
 import Web3 from 'web3';
 import config from '@/config';
 
-const { network }: any = config;
+const { networks }: any = config;
 
-// const config: any = {
-//   31337: {
-//     provider: new Web3.providers.HttpProvider(process.env.NETWORK as string, {
-//       headers: [
-//         {
-//           name: 'Access-Control-Allow-Origin',
-//           value: '*',
-//         },
-//       ],
-//     }),
-//     wbtc: process.env.SETTLE_TOKEN_CONTRACT_ADDRESS,
-//     usdt: process.env.PAYMENT_TOKEN_CONTRACT_ADDRESS,
-//   },
-// };
-
-export const useSDK = (chainId: string | number, project: string) => {
+export const useSDK = (network: string, project: string) => {
   const sdk = useRef<any>(null);
-  if (!chainId || !project) return sdk;
+  if (!network || !project) return sdk;
 
-  const { provider, wbtc, usdt, vending } = network[chainId];
+  const networkCfg = networks[network];
+  if (!networkCfg) return sdk;
 
-  console.log({ chainId, project, wbtc, usdt, provider });
+  const { provider, wbtc, usdt, vending } = networkCfg;
+
+  console.log({ network, project, wbtc, usdt, provider });
 
   useEffect(() => {
     const SDK = require('@/sdk');
-    sdk.current = new SDK(provider, project, wbtc, usdt);
+    sdk.current = new SDK(provider, project, wbtc, usdt, vending);
   }, []);
 
   return sdk;
 };
 
-export const useBasicInfo = (chainId: string | number, project: string) => {
-  if (!chainId || !project) return null;
+export const useBasicInfo = (network: string, project: string) => {
+  if (!network || !project) return null;
 
-  const sdk = useSDK(chainId, project);
+  const sdk = useSDK(network, project);
 
   const [basicInfo, setBasicInfo] = useState<any>({});
 
@@ -47,6 +35,8 @@ export const useBasicInfo = (chainId: string | number, project: string) => {
   }, []);
 
   const init = async () => {
+    if (!sdk.current) return null;
+
     const basic = await sdk?.current.getBasicInfo();
     setBasicInfo(basic);
   };
@@ -54,10 +44,10 @@ export const useBasicInfo = (chainId: string | number, project: string) => {
   return basicInfo;
 };
 
-export const useMetadata = (chainId: string | number, project: string) => {
-  if (!chainId || !project) return null;
+export const useMetadata = (network: string, project: string) => {
+  if (!network || !project) return null;
 
-  const sdk = useSDK(chainId, project);
+  const sdk = useSDK(network, project);
 
   const [metadata, setMetadata] = useState<any>({});
 
@@ -66,6 +56,8 @@ export const useMetadata = (chainId: string | number, project: string) => {
   }, []);
 
   const init = async () => {
+    if (!sdk.current) return null;
+
     const data = await sdk.current.getMetadata();
     setMetadata(data);
   };

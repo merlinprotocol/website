@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'umi';
+import { useParams, useLocation } from 'umi';
 import classnames from 'classnames';
 import styles from './Info.less';
 import BuyModal from '@/components/BuyModal2';
@@ -8,9 +8,12 @@ import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
 
 export default () => {
   const { contract, chainId }: any = useParams();
+  const {
+    query: { addr, network },
+  }: any = useLocation();
 
-  const metadata = useMetadata(chainId, contract);
-  const basicInfo = useBasicInfo(chainId, contract);
+  const metadata = useMetadata(network || 'hardhat', addr);
+  const basicInfo = useBasicInfo(network || 'hardhat', addr);
 
   useEffect(() => {}, []);
 
@@ -37,14 +40,14 @@ export default () => {
       {/* Message && Buy */}
       <div className={styles.messageAndBuy}>
         <span className={styles.text}>
-          {metadata?.description}:{contract}
+          {metadata?.description}:{addr}
         </span>
 
         {/* Buy */}
         <BuyModal
           projectInfo={{
-            chainId: chainId,
-            projectAddr: contract,
+            network: network || 'hardhat',
+            projectAddr: addr,
           }}
           project={basicInfo}
           wrapBtnClassName={styles.wrapBtn}
