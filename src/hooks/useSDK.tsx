@@ -13,8 +13,6 @@ export const useSDK = (network: string, project: string) => {
 
   const { provider, wbtc, usdt, vending } = networkCfg;
 
-  console.log({ network, project, wbtc, usdt, provider });
-
   useEffect(() => {
     const SDK = require('@/sdk');
     sdk.current = new SDK(provider, project, wbtc, usdt, vending);

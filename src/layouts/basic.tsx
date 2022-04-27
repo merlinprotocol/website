@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import { Hardhat, Mainnet, Ropsten, BSCTestnet, DAppProvider, Config, useEthers } from '@usedapp/core';
-import styles from './basic.less';
+import useCheckNetwork from '@/hooks/useCheckNetwork';
 
 const config: Config = {
   multicallAddresses: {
@@ -16,8 +16,12 @@ const customizeRenderEmpty = () => (
   </div>
 );
 
-export default (props: React.PropsWithChildren<{}>) => (
-  <DAppProvider config={config}>
-    <ConfigProvider renderEmpty={customizeRenderEmpty}>{props.children}</ConfigProvider>
-  </DAppProvider>
-);
+export default (props: React.PropsWithChildren<{}>) => {
+  useCheckNetwork();
+
+  return (
+    <DAppProvider config={config}>
+      <ConfigProvider renderEmpty={customizeRenderEmpty}>{props.children}</ConfigProvider>
+    </DAppProvider>
+  );
+};

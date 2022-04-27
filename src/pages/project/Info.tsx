@@ -11,7 +11,6 @@ export default () => {
     query: { addr, network },
   }: any = useLocation();
 
-  console.log('network', network);
   const metadata = useMetadata(network || 'hardhat', addr);
   const basicInfo = useBasicInfo(network || 'hardhat', addr);
 
