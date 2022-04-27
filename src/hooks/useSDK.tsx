@@ -4,7 +4,7 @@ import config from '@/config';
 
 const { networks }: any = config;
 
-export const useSDK = (network: string, project: string) => {
+export const useSDK = (network: string = 'hardhat', project: string) => {
   const sdk = useRef<any>(null);
   if (!network || !project) return sdk;
 
@@ -46,7 +46,6 @@ export const useMetadata = (network: string, project: string) => {
   if (!network || !project) return null;
 
   const sdk = useSDK(network, project);
-
   const [metadata, setMetadata] = useState<any>({});
 
   useEffect(() => {

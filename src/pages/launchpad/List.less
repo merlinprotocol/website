@@ -1,7 +1,7 @@
 @import '~@/mixin.less';
 
 .item {
-  width: 638px;
+  width: 580px;
   height: 250px;
   color: #fff;
   background-size: cover;
@@ -9,20 +9,25 @@
   padding-left: 30px;
   padding-right: 48px;
   padding-top: 20px;
+  background-size: 580px 250px;
+  border-radius: 14px;
 
   &:nth-child(1),
   &:nth-child(2) {
     background-image: url(~@/assets/item-bg-1.png);
+    border: 1px solid #c75793;
   }
 
   &:nth-child(3),
   &:nth-child(4) {
     background-image: url(~@/assets/item-bg-2.png);
+    border: 1px solid #5186bf;
   }
 
   &:nth-child(5),
   &:nth-child(6) {
     background-image: url(~@/assets/item-bg-3.png);
+    border: 1px solid #e5ca8a;
   }
 }
 
@@ -69,10 +74,13 @@
 .list {
   background: url(~@/assets/logo-2.png) no-repeat bottom right -100px;
   background-size: 630px auto;
+  padding-bottom: 110px;
 }
 
 .content {
-  padding: 0 64px;
+  width: 1252px;
+  margin: 0 auto;
+
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

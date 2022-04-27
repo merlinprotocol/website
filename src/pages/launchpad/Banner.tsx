@@ -10,8 +10,8 @@ const SECONDS_PER_WEEK = 7 * 24 * 3600;
 const project = process.env.HASHRATE_CONTRACT_ADDRESS as string;
 
 export default () => {
-  const metadata = useMetadata(31337, project);
-  const basicInfo = useBasicInfo(31337, project);
+  const metadata = useMetadata('hardhat', project);
+  const basicInfo = useBasicInfo('hardhat', project);
 
   const [raising, setRaising] = useState(false); // 募集中
   const [timeLeft, setTimeLeft] = useState<moment.Duration>(); // 募集期剩余时间

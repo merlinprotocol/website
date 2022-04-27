@@ -22,7 +22,7 @@ export default () => {
 
   useEffect(() => {
     // TODO
-    init();
+    // init();
   }, []);
 
   const init = async () => {
