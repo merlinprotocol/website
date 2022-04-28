@@ -19,9 +19,6 @@ module.exports = class SDK {
     this.wbtc = new this.web3.eth.Contract(ABIERC20, wbtcAddr);
     this.usdt = new this.web3.eth.Contract(ABIERC20, usdtAddr);
     this.vending = new this.web3.eth.Contract(ABIVending, vendingAddr);
-
-    console.log({ rpcOrProvider, projectAddr, wbtcAddr, usdtAddr, vendingAddr });
-    console.log('sdk:', this);
   }
 
   async ProjectCalendarInfo() {
@@ -89,7 +86,6 @@ module.exports = class SDK {
   }
 
   async getBasicInfo() {
-    console.log('getBasicInfo');
     const projectMethods = this.project.methods;
 
     const supply = await projectMethods.getSupply().call();
@@ -130,7 +126,6 @@ module.exports = class SDK {
       deliveryTimes,
     };
 
-    console.log('info', info);
     return info;
   }
 

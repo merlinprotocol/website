@@ -22,7 +22,6 @@ export const useSDK = (network: string = 'hardhat', project: string) => {
 };
 
 export const useBasicInfo = (network: string, project: string) => {
-  console.log('useBasicInfo', { network, project });
   if (!network || !project) return null;
 
   const sdk = useSDK(network, project);
