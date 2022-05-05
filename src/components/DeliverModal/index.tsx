@@ -36,7 +36,7 @@ const BuyModal: FC<{ idx: number; handleDeliver: (idx: number, amount: string, a
 
   return (
     <div>
-      <Modal title={null} footer={null} visible={visible} onCancel={handleCancel} wrapClassName={styles.deliverModal} closable={false} width={800}>
+      <Modal centered title={null} footer={null} visible={visible} onCancel={handleCancel} wrapClassName={styles.deliverModal} closable={false} width={800}>
         <div className={styles.content}>
           <div className={classnames(styles.header)}>
             <span className={styles.wrapCloseIcon} onClick={() => setVisible(false)}>

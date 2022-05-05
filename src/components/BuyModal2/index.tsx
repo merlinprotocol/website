@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { Modal, message } from 'antd';
+import { Modal, message, notification } from 'antd';
 import close from '@/assets/icon-close.png';
 import people from '@/assets/people.png';
 import { useEthers } from '@usedapp/core';
@@ -71,7 +71,11 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
 
       let tx = null;
       if (tab === BUY) {
-        tx = await sdk.buy(volumn, account);
+        try {
+          tx = await sdk.buy(volumn, account);
+        } catch (error: any) {
+          notification.error({ message: error.message, placement: 'bottomRight' });
+        }
       } else if (tab === BIND) {
         // if (!selectedNFT) {
         //   message.error('NFT not select!');

@@ -19,6 +19,7 @@ const { BN } = Web3.utils;
 module.exports = class SDK {
   constructor(rpcOrProvider, projectAddr, wbtcAddr, usdtAddr, vendingAddr) {
     this.web3 = new Web3(rpcOrProvider);
+    this._rpcOrProvider = rpcOrProvider;
     this.project = new this.web3.eth.Contract(ABIProject, projectAddr);
     this.wbtc = new this.web3.eth.Contract(ABIERC20, wbtcAddr);
     this.usdt = new this.web3.eth.Contract(ABIERC20, usdtAddr);
@@ -119,7 +120,7 @@ module.exports = class SDK {
     const deliveryStart = new BN(startTime).add(new BN(collectionPeriodDuration));
 
     // 当前阶段
-    const currentTime = this.currentTime();
+    const currentTime = await this.currentTime();
     const currentStage = this.currentStage(currentTime, startTime);
 
     // const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
@@ -332,10 +333,15 @@ module.exports = class SDK {
     // await paymentTokenApprove(paymentTokenContract, VENDING_CONTRACT_ADDRESS, from, _amount.toString());
     const price = await this.project.methods.getPrice().call();
     const amount = new BigNumber(price).times(new BigNumber(volumn));
-    console.log('price:', price);
-    console.log('volumn:', new BigNumber(volumn).toNumber());
 
-    console.log('amount:', amount.toNumber());
+    console.log('getTransacrionCount', this.web3.eth.getTransactionCount(from));
+    let baseNonce = this.web3.eth.getTransactionCount(from);
+    let nonceOffset = 0;
+    function getNonce() {
+      return baseNonce.then((nonce) => nonce + nonceOffset++);
+    }
+
+    console.log('getNonce:', await getNonce());
 
     // 授权
     const allowance = await this.usdt.methods.allowance(from, this.vending._address).call();

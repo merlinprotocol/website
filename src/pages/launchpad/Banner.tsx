@@ -132,7 +132,7 @@ export default () => {
             <Button
               size="large"
               className={styles.button}
-              disabled={basicInfo?.currentStage !== 'CollectionPeriod' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
+              disabled={basicInfo?.currentStage !== 'Collection' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
             >
               获取算力
             </Button>

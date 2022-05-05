@@ -38,7 +38,10 @@ export default () => {
 
         {/* Message && Buy */}
         <div className={styles.messageAndBuy}>
-          <span className={styles.text}>Project: {addr}</span>
+          <div className={styles.wrapMessage}>
+            <span>{metadata?.description}</span>
+            <span className={styles.text}>Project: {addr}</span>
+          </div>
 
           {/* Buy */}
           <BuyModal
@@ -57,7 +60,7 @@ export default () => {
               <Button
                 size="large"
                 className={styles.buyBtn}
-                disabled={basicInfo?.currentStage !== 'CollectionPeriod' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
+                disabled={basicInfo?.currentStage !== 'Collection' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
               >
                 获取算力
               </Button>

@@ -5,7 +5,7 @@ export default {
     hardhat: {
       chainId: '0x7a69',
       provider: new Web3(Web3.givenProvider || 'http://8.210.141.80:8545/'),
-      wbtc: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+      wbtc: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
       usdt: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
       vending: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
     },
