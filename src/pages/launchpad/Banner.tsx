@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
+import { Button } from 'antd';
 import { Link } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
 import BuyModal from '@/components/BuyModal2';
 import styles from './Banner.less';
 import moment from 'moment';
 import { useBasicInfo, useMetadata } from '@/hooks/useSDK';
+import config from '@/config';
+
+const networks: any = config.networks;
 
 const SECONDS_PER_WEEK = 7 * 24 * 3600;
 const project = process.env.HASHRATE_CONTRACT_ADDRESS as string;
@@ -40,6 +44,7 @@ export default () => {
   // calc process
   useEffect(() => {
     if (basicInfo) {
+      console.log(basicInfo);
       setSoldPercent(Math.floor((basicInfo.sold / basicInfo.supply) * 1e4) / 1e4);
     }
   }, [basicInfo]);
@@ -60,7 +65,7 @@ export default () => {
           </div>
 
           <div className={styles.right}>
-            <Link to={`/launchpad/${basicInfo?.contract}`} style={{ color: '#fff' }}>
+            <Link to={`/launchpad/project?addr=${project}`} style={{ color: '#fff' }}>
               <RightOutlined />
               More
             </Link>
@@ -114,6 +119,7 @@ export default () => {
         </div>
 
         {/* Buy */}
+
         <BuyModal
           project={basicInfo}
           projectInfo={{
@@ -122,7 +128,14 @@ export default () => {
           }}
         >
           <div className={styles.buy}>
-            <span className={styles.button}>获取算力</span>
+            {/* {basicInfo?.currentStage === 'Collection' && <span className={styles.button}>获取算力</span>} */}
+            <Button
+              size="large"
+              className={styles.button}
+              disabled={basicInfo?.currentStage !== 'CollectionPeriod' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
+            >
+              获取算力
+            </Button>
           </div>
         </BuyModal>
       </div>

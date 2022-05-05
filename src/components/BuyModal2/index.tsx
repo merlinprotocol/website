@@ -192,7 +192,7 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
         </div>
       </Modal>
 
-      <div style={{ cursor: 'pointer' }} onClick={onClickButton} className={wrapBtnClassName}>
+      <div style={{ cursor: 'pointer', display: 'inline-block' }} onClick={onClickButton} className={wrapBtnClassName}>
         {children}
       </div>
     </div>

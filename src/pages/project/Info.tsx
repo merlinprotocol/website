@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'umi';
+import { Button } from 'antd';
 import classnames from 'classnames';
 import styles from './Info.less';
 import BuyModal from '@/components/BuyModal2';
@@ -48,8 +49,18 @@ export default () => {
             project={basicInfo}
             wrapBtnClassName={styles.wrapBtn}
           >
-            <div className={styles.buy}>
+            {/* <div className={styles.buy}>
               <span className={styles.buyBtn}>购买</span>
+            </div> */}
+
+            <div className={styles.buy}>
+              <Button
+                size="large"
+                className={styles.buyBtn}
+                disabled={basicInfo?.currentStage !== 'CollectionPeriod' || Number(basicInfo?.sold) === Number(basicInfo?.supply)}
+              >
+                获取算力
+              </Button>
             </div>
           </BuyModal>
         </div>

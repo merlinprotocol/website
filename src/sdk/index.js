@@ -118,6 +118,10 @@ module.exports = class SDK {
     const deliveryTimes = (contractDuraction - collectionPeriodDuration) / WEEKS + 1;
     const deliveryStart = new BN(startTime).add(new BN(collectionPeriodDuration));
 
+    // 当前阶段
+    const currentTime = this.currentTime();
+    const currentStage = this.currentStage(currentTime, startTime);
+
     // const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
     // const radio = initialPaymentRatio.toNumber() / 1e4;
     // const initialPayment = amount * radio;
@@ -139,6 +143,7 @@ module.exports = class SDK {
       contractDuraction: parseInt(contractDuraction),
       collectionPeriodDuration: parseInt(collectionPeriodDuration),
       deliveryTimes,
+      currentStage,
     };
   }
 
@@ -336,7 +341,7 @@ module.exports = class SDK {
     const allowance = await this.usdt.methods.allowance(from, this.vending._address).call();
 
     if (new BigNumber(allowance).lt(amount)) {
-      await this.usdt.methods.approve(this.vending._address, amount).send({ from });
+      await this.usdt.methods.approve(this.vending._address, amount.toString()).send({ from });
     }
 
     const tx = await this.vending.methods.buy(this.project._address, volumn).send({ from });
