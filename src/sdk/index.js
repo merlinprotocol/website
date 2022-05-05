@@ -5,6 +5,10 @@ const ABIProject = require('./abis/Project.json');
 const ABISplitter = require('./abis/PaymentSplitter.json');
 const ABIERC20 = require('./abis/ERC20.json');
 const ABIVending = require('./abis/Vending.json');
+var request = require('request');
+
+const axios = require('axios');
+const MINER_URL = 'http://api.merlinprotocol.org/api/merlin/miner_daily_hashrate/list';
 
 const DAYS = 3600 * 24;
 const WEEKS = DAYS * 7;
@@ -21,6 +25,13 @@ module.exports = class SDK {
     this.vending = new this.web3.eth.Contract(ABIVending, vendingAddr);
   }
 
+  async getWeekDayAmounts() {
+    if (this.weekDayAmounts == undefined) {
+      this.weekDayAmounts = await this.project.methods.getWeekDayAmounts().call();
+    }
+    return this.weekDayAmounts;
+  }
+
   async ProjectCalendarInfo() {
     var startTime = parseInt(await this.project.methods.startTime().call());
     const collectionDuration = 7;
@@ -30,7 +41,7 @@ module.exports = class SDK {
     var blockNumber = await this.web3.eth.getBlockNumber();
     var bestBlock = await this.web3.eth.getBlock(blockNumber);
 
-    var wbtcAmounts = await this.project.methods.getWeekDayAmounts().call();
+    var wbtcAmounts = await this.getWeekDayAmounts();
     const settleds = await this.project.methods.getSettled().call();
     var objs = new Array();
     for (var i = 0; i < this.dayCount; i++) {
@@ -53,7 +64,6 @@ module.exports = class SDK {
               }
               objs[i - j].isDeliverEnable = true;
             }
-            // if (obj.stage != 'Collection') objs[j].isDeliverEnable = true;
           }
         }
       } else {
@@ -66,11 +76,16 @@ module.exports = class SDK {
       const week = Math.floor(i / 7);
       const day = i % 7;
       if (obj.stage != 'Collection') obj.wbtcAmount = parseInt(wbtcAmounts[week - 1][day]);
-      //TODO
-      obj.hashrate = 0;
+      obj.hashrate = await this.getHashrate(i);
+      obj.wbtcMinted = await this.getYield(i);
       obj.usdtAmount = 0;
-      obj.deliverState = await this.getDeliverState(obj.timestamp); // 是否足额交付
-      obj.wbtcMinted = await this.getMinted(obj.timestamp); // 应交付wbtc
+      if (obj.wbtcAmount == 0) {
+        obj.deliverState = 0;
+      } else if (obj.wbtcAmount < obj.wbtcMinted) {
+        obj.deliverState = 1;
+      } else {
+        obj.deliverState = 2;
+      }
       objs.push(obj);
     }
     return startTime, objs;
@@ -98,16 +113,16 @@ module.exports = class SDK {
 
     const startTime = parseInt(await projectMethods.startTime().call());
 
-    const deliveryStart = new BN(startTime).add(new BN(collectionPeriodDuration));
     const contractDuraction = parseInt(await projectMethods.contractDuraction().call());
     const collectionPeriodDuration = await projectMethods.collectionPeriodDuration().call();
     const deliveryTimes = (contractDuraction - collectionPeriodDuration) / WEEKS + 1;
+    const deliveryStart = new BN(startTime).add(new BN(collectionPeriodDuration));
 
     // const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
     // const radio = initialPaymentRatio.toNumber() / 1e4;
     // const initialPayment = amount * radio;
 
-    const info = {
+    return {
       supply,
       usdtDecimals,
       price,
@@ -125,8 +140,6 @@ module.exports = class SDK {
       collectionPeriodDuration: parseInt(collectionPeriodDuration),
       deliveryTimes,
     };
-
-    return info;
   }
 
   async getMetadata() {
@@ -233,8 +246,10 @@ module.exports = class SDK {
    * @returns
    */
   async inverstments(account) {
+    console.time('inverstments');
     const settleds = await this.project.methods.getSettled().call();
     var objs = new Array();
+    var totalShares = 0;
     for (var i = 0; i < settleds.length; i++) {
       const address = settleds[i];
       if (address == ZERO_ADDRESS) {
@@ -245,32 +260,31 @@ module.exports = class SDK {
       if (shares > 0) {
         var obj = new Inverstment(account, splitter, this.wbtc, this.usdt);
         obj.index = i;
-        obj.totalShares = parseInt(await splitter.methods.totalShares().call());
+        if (totalShares == 0) {
+          totalShares = parseInt(await splitter.methods.totalShares().call());
+        }
         obj.shares = parseInt(await splitter.methods.shares(account).call());
 
         const wbtcInSplitter = parseInt(await this.wbtc.methods.balanceOf(address).call());
         const wbtcReleased = parseInt(await splitter.methods.totalReleased(this.wbtc._address).call());
         obj.wbtcDelivered = wbtcInSplitter + wbtcReleased;
         obj.wbtcClaimed = parseInt(await splitter.methods.released(this.wbtc._address, account).call());
-        obj.wbtcBalance = obj.wbtcDelivered == 0 ? 0 : (obj.wbtcDelivered / obj.totalShares) * obj.shares;
+        obj.wbtcBalance = obj.wbtcDelivered == 0 ? 0 : (obj.wbtcDelivered / totalShares) * obj.shares;
         obj.wbtcBalance -= obj.wbtcClaimed;
-        // obj.wbtcBalance = (obj.wbtcDelivered==0) ? 0 : obj.wbtcTotal / totalShares * shares;
         const usdtInSplitter = parseInt(await this.usdt.methods.balanceOf(address).call());
         const usdtReleased = parseInt(await splitter.methods.totalReleased(this.usdt._address).call());
         obj.usdtCompensation = usdtInSplitter + usdtReleased;
-        obj.usdtBalance = obj.usdtCompensation == 0 ? 0 : (obj.usdtCompensation / obj.totalShares) * obj.shares;
+        obj.usdtBalance = obj.usdtCompensation == 0 ? 0 : (obj.usdtCompensation / totalShares) * obj.shares;
         const usdtClaimed = parseInt(await splitter.methods.released(this.usdt._address, account).call());
         obj.usdtBalance -= usdtClaimed;
-        obj.wbtcMinted = await this.getMinted(/** timestamp */); // 应交付wbtc
-        // obj.usdtTotal = parseInt(await this.usdt.methods.balanceOf(address).call());
-        // obj.usdtBalance = (obj.usdtTotal==0) ? 0 : obj.usdtTotal / totalShares * shares;
-        // obj.wbtcReleased = parseInt(await splitter.methods.released(this.wbtc._address, account).call());
-        // obj.wbtcBalance -= obj.wbtcReleased;
-        // obj.usdtReleased = parseInt(await splitter.methods.released(this.usdt._address, account).call());
+        obj.wbtcMinted = 0;
+        for (var j = 0; j < 7; j++) {
+          obj.wbtcMinted += await this.getYield(i * 7 + j);
+        }
         objs.push(obj);
       }
     }
-    console.log(await this.wbtc.methods.balanceOf(settleds[0]).call());
+    console.timeEnd('inverstments');
     return objs;
   }
 
@@ -297,38 +311,10 @@ module.exports = class SDK {
   }
 
   /**
-   * @desc 查询指定日期的比特币挖矿产出
-   * startTime 转换成utc时间，
-   * @param {*} timestamp
-   * @returns btc balance staoshi
-   */
-  async getMinted(contract, startTime, offsetDay) {
-    return 0;
-  }
-
-  /**
-   * @desc 是否足额交付 0-未交付 1-交付不足 2-足额交付
-   * @param {*} timestamp
-   * @returns 0 | 1 | 2
-   */
-  async getDeliverState(timestamp) {
-    return Math.floor(Math.random() * 3);
-  }
-
-  /**
    * @desc 保险池金额
    * @returns
    */
   async getOptionAccountBalance() {
-    return 0;
-  }
-
-  /**
-   * @desc 获取指定日期的平均算力
-   * @param {*} timestamp
-   * @returns
-   */
-  async getHashrate(contract, startTime, offsetDay) {
     return 0;
   }
 
@@ -359,6 +345,56 @@ module.exports = class SDK {
     // const sold = await this.project.methods.getSold().call();
     // console.log('check sold:', sold);
     // console.log('done ✅');
+  }
+
+  async reqYield() {
+    const beginTime = parseInt(await this.project.methods.startTime().call());
+    const endTime = beginTime + 55 * 7 * 24 * 3600;
+    var options = {
+      method: 'GET',
+      url: 'http://api.merlinprotocol.org/api/merlin/miner_daily_hashrate/list',
+      qs: {
+        'params[beginTime]': beginTime,
+        'params[endTime]': endTime,
+        minerName: this.project.address,
+      },
+    };
+    return new Promise(function (resolve, reject) {
+      request(options, function (error, res, body) {
+        if (!error && res.statusCode == 200) {
+          const response = JSON.parse(body);
+          if (response.code != 200) {
+            reject(response.msg);
+          }
+          var rets = new Array();
+          response.rows.forEach(function (data) {
+            var obj = new Object();
+            obj.index = data.id;
+            obj.hashrate = data.hashesDay;
+            obj.yield = data.valueDay;
+            rets.push(obj);
+          });
+          resolve(rets);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  async getMineYield() {
+    if (this.yield == undefined) {
+      this.yield = await this.reqYield();
+    }
+    return this.yield;
+  }
+
+  async getHashrate(day) {
+    return (await this.getMineYield())[day].hashrate;
+  }
+
+  async getYield(day) {
+    return (await this.getMineYield())[day].yield;
   }
 };
 

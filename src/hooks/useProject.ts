@@ -78,7 +78,7 @@ export default () => {
   const calcInitialPayment = (soldAmount: BigNumber | null, initialPaymentRatio: BigNumber) => {
     console.log({ soldAmount: soldAmount?.toNumber(), initialPaymentRatio: initialPaymentRatio.toNumber() });
     if (soldAmount) {
-      const amount = soldAmount.div(BigNumber.from('1000000')).toNumber();
+      const amount = soldAmount.toNumber() / 1e6;
       const radio = initialPaymentRatio.toNumber() / 1e4;
       const initialPayment = amount * radio;
 
@@ -173,7 +173,7 @@ export default () => {
       const soldAmount = calcSoldAmount(currentStage, price, sold); // wei
       const initialPayment = calcInitialPayment(soldAmount, initialPaymentRatio); // usdt
       const deliveryTimes = calcDeliveryTimes(contractDuraction, collectionPeriodDuration);
-      const depositAccountBalance = calcDepositAccountBalance(initialPayment, soldAmount);
+      const depositAccountBalance = calcDepositAccountBalance(String(initialPayment), soldAmount);
 
       const week = calcWeek(deliveryStart, currentTime);
       const settleDay = calcSettleDay(startTimeMoment.clone(), collectionPeriodDuration, week);

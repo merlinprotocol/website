@@ -37,6 +37,7 @@
     "react-dom": "17.x",
     "react-use": "^17.3.2",
     "umi": "^3.5.20",
+    "url": "^0.11.0",
     "web3": "^1.7.3"
   },
   "devDependencies": {

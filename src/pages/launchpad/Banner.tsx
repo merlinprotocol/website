@@ -114,7 +114,13 @@ export default () => {
         </div>
 
         {/* Buy */}
-        <BuyModal project={basicInfo}>
+        <BuyModal
+          project={basicInfo}
+          projectInfo={{
+            network: 'hardhat',
+            projectAddr: process.env.HASHRATE_CONTRACT_ADDRESS as string,
+          }}
+        >
           <div className={styles.buy}>
             <span className={styles.button}>获取算力</span>
           </div>

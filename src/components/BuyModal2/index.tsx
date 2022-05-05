@@ -66,7 +66,7 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
 
       const SDK = require('@/sdk');
       const { network, projectAddr } = projectInfo;
-      const { provider, wbtc, usdt, vending } = networks[network] || {};
+      const { provider, wbtc, usdt, vending } = networks[network || 'hardhat'] || {};
       const sdk = new SDK(provider, projectAddr, wbtc, usdt, vending);
 
       let tx = null;
@@ -93,6 +93,7 @@ const BuyModal: FC<{ projectInfo: { network: string; projectAddr: string }; proj
   return (
     <div className={classnames('wrapBuyModal')}>
       <Modal
+        centered
         title={null}
         footer={null}
         visible={visible}

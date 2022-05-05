@@ -68,6 +68,8 @@ export default () => {
   const [years, setYears] = useState<any[]>([]);
   const [currentMoment, setCurrentMoment] = useState(moment());
 
+  console.log(days);
+
   // const [currentInfo, setCurrentInfo] = useState([]);
 
   useEffect(() => {
@@ -140,7 +142,7 @@ export default () => {
   const dateCellRender = (day: any, onSettle: (idx: number) => void, onDeliver: (idx: number) => void): React.ReactNode => {
     const content = (
       <div>
-        <div>应交付:- WBTC</div>
+        <div>应交付:{day.wbtcMinted} WBTC</div>
         <div>已交付:{day.wbtcAmount ? utils.formatUnits(BigNumber.from(day.wbtcAmount), 8) : '-'} WBTC</div>
         <div>已交付:{day.usdtAmount ? utils.formatUnits(BigNumber.from(day.usdtAmount), 18) : '-'} USDT</div>
       </div>
